@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		410E5F5D1E6C754D00194D71 /* Assignment2.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Assignment2.playground; sourceTree = "<group>"; };
 		FB3581551E3E7E2B00638BB6 /* Assignment2.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Assignment2.rtf; sourceTree = "<group>"; };
 		FBAD2DC71E2BDE55008207C0 /* Assignment2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Assignment2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBAD2DCA1E2BDE55008207C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -24,7 +25,6 @@
 		FBAD2DD11E2BDE55008207C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FBAD2DD41E2BDE55008207C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FBAD2DD61E2BDE55008207C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FBAD2E7E1E2E56D1008207C0 /* Assignment2.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Assignment2.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,8 +41,8 @@
 		FBAD2DBE1E2BDE55008207C0 = {
 			isa = PBXGroup;
 			children = (
+				410E5F5D1E6C754D00194D71 /* Assignment2.playground */,
 				FB3581551E3E7E2B00638BB6 /* Assignment2.rtf */,
-				FBAD2E7E1E2E56D1008207C0 /* Assignment2.playground */,
 				FBAD2DC91E2BDE55008207C0 /* Assignment2 */,
 				FBAD2DC81E2BDE55008207C0 /* Products */,
 			);
