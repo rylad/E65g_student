@@ -20,26 +20,57 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aw2-M4-Cg5" customClass="GridView" customModule="Assignment3" customModuleProvider="target">
-                                <rect key="frame" x="67" y="213.5" width="240" height="240"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CP2-Nc-onf" customClass="GridView" customModule="Assignment3" customModuleProvider="target">
+                                <rect key="frame" x="67" y="213" width="240" height="240"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="Gj6-LT-QhF"/>
-                                    <constraint firstAttribute="height" constant="240" id="qjP-g2-INQ"/>
+                                    <constraint firstAttribute="height" constant="240" id="Fs5-AI-pWh"/>
+                                    <constraint firstAttribute="width" constant="240" id="Jah-BX-S1m"/>
                                 </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="livingColor">
-                                        <color key="value" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                             </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Gif-1g-CDi">
+                                <rect key="frame" x="67" y="166" width="32" height="30"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="AzD-3b-1gI">
+                                        <rect key="frame" x="0.0" y="0.0" width="32" height="30"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hSp-uE-rjv">
+                                                <rect key="frame" x="0.0" y="0.0" width="32" height="30"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dsY-id-bHI">
+                                                        <rect key="frame" x="0.0" y="0.0" width="32" height="30"/>
+                                                        <state key="normal" title="Step"/>
+                                                        <connections>
+                                                            <action selector="step:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YmM-ts-5JK"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8iX-SE-PZl">
+                                <rect key="frame" x="268" y="166" width="39" height="30"/>
+                                <state key="normal" title="Reset"/>
+                                <connections>
+                                    <action selector="reset:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ibg-Pz-vvX"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="aw2-M4-Cg5" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="JZF-xj-5Im"/>
-                            <constraint firstItem="aw2-M4-Cg5" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ZO0-ue-Cz6"/>
+                            <constraint firstItem="CP2-Nc-onf" firstAttribute="top" secondItem="Gif-1g-CDi" secondAttribute="bottom" constant="17" id="Aqf-zb-8Jm"/>
+                            <constraint firstItem="8iX-SE-PZl" firstAttribute="trailing" secondItem="CP2-Nc-onf" secondAttribute="trailing" id="JRz-SA-CFX"/>
+                            <constraint firstItem="CP2-Nc-onf" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ZOL-Pt-DSE"/>
+                            <constraint firstItem="CP2-Nc-onf" firstAttribute="leading" secondItem="Gif-1g-CDi" secondAttribute="leading" id="czs-2b-SJQ"/>
+                            <constraint firstItem="CP2-Nc-onf" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="kVZ-TM-eT6"/>
+                            <constraint firstItem="8iX-SE-PZl" firstAttribute="top" secondItem="Gif-1g-CDi" secondAttribute="top" id="pZI-Bm-eWD"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="gridView" destination="dsY-id-bHI" id="2Q9-pJ-max"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
