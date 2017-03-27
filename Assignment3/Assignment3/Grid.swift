@@ -25,12 +25,35 @@ public func positionSequence (from: Position, to: Position) -> PositionSequence 
 public enum CellState {
     case alive, empty, born, died
     
+    switch description{
+        case .alive:
+            "Alive"
+        case .empty:
+            "Empty"
+        case .born:
+            "Born"
+        case .died:
+            "Died"
+    }
+    
+    var allValues = [alive, empty, born, died]
+    
     public var isAlive: Bool {
         switch self {
         case .alive, .born: return true
         default: return false
         }
     }
+    
+    func toggle(value: CellState.isAlive) -> CellState{
+        if CellState.isAlive == true
+        {CellState.isAlive=false}
+        else
+        {CellState.isAlive=true}
+        
+        
+    }
+    
 }
 
 public struct Cell {
