@@ -23,13 +23,17 @@ public func positionSequence (from: Position, to: Position) -> PositionSequence 
 }
 
 public enum CellState:String {
-    case alive, empty, born, died
+    case alive = "Alive"
+    case empty = "Empty"
+    case born = "Born"
+    case died = "Died"
     
+
 /*
-    
-    switch description{
+    func description(description: String) -> String{
+        switch self.rawValue{
         case .alive:
-            "Alive"
+            return "Alive"
         case .empty:
             "Empty"
         case .born:
@@ -38,6 +42,7 @@ public enum CellState:String {
             "Died"
         default:
             break
+    }
     }
 */
     
@@ -50,17 +55,18 @@ public enum CellState:String {
         }
     }
     
-/*
-    func toggle(value: self) -> CellState{
+
+    mutating func toggle(value: CellState) -> CellState{
         switch self.isAlive {
         case true:
-            self.empty
+            self = .empty
         case false:
-            self.alive
-    }
+            self = .alive
+        }
+        return self
 
     }
- */
+
     
 }
 

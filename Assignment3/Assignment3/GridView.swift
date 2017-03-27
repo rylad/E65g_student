@@ -21,9 +21,9 @@ import UIKit
             grid = Grid(size,size)
         }
     }
-    @IBInspectable var gridWidth = 2.0
+    @IBInspectable var gridWidth = CGFloat(2.0)
     
-var grid = Grid(3,3)
+    var grid = Grid(3,3)
     
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
@@ -37,8 +37,8 @@ var grid = Grid(3,3)
         (0..<self.size).forEach { i in
             (0..<self.size).forEach { j in
                 let origin = CGPoint (
-                    x: base.x + (CGFloat(i) * size.width),
-                    y: base.y + (CGFloat(j) * size.height)
+                    x: base.x + (CGFloat(j) * size.width),
+                    y: base.y + (CGFloat(i) * size.height)
                 )
                 let subRect = CGRect (
                     origin: origin,

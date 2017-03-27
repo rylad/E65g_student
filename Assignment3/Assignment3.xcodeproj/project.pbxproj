@@ -67,8 +67,8 @@
 			children = (
 				FBAD2DE81E2BE34F008207C0 /* AppDelegate.swift */,
 				FBAD2DEA1E2BE34F008207C0 /* ViewController.swift */,
-				417DC0281E885F1000953682 /* GridView.swift */,
 				FBAD2DEC1E2BE34F008207C0 /* Main.storyboard */,
+				417DC0281E885F1000953682 /* GridView.swift */,
 				FBAD2DEF1E2BE34F008207C0 /* Assets.xcassets */,
 				FBAD2DF11E2BE34F008207C0 /* LaunchScreen.storyboard */,
 				FBAD2DF41E2BE34F008207C0 /* Info.plist */,
