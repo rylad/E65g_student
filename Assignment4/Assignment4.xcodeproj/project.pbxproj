@@ -7,21 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FB475A381E8828EF00D2EAD3 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB475A371E8828EF00D2EAD3 /* Grid.swift */; };
+		413AB9991EA8172100CAB5C5 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413AB9981EA8172100CAB5C5 /* Grid.swift */; };
+		413AB99B1EA817AF00CAB5C5 /* XView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413AB99A1EA817AF00CAB5C5 /* XView.swift */; };
+		413AB99D1EA8443B00CAB5C5 /* GridProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413AB99C1EA8443B00CAB5C5 /* GridProtocol.swift */; };
+		419D07F21EA4561100D04565 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 419D07F11EA4561100D04565 /* StatisticsViewController.swift */; };
+		419D07FE1EA813BA00D04565 /* InstrumentationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD2E081E2BE38C008207C0 /* InstrumentationViewController.swift */; };
+		419D07FF1EA813C100D04565 /* SimulationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD2E0A1E2BE38C008207C0 /* SimulationViewController.swift */; };
 		FBAD2E071E2BE38C008207C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD2E061E2BE38C008207C0 /* AppDelegate.swift */; };
-		FBAD2E091E2BE38C008207C0 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD2E081E2BE38C008207C0 /* FirstViewController.swift */; };
-		FBAD2E0B1E2BE38C008207C0 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD2E0A1E2BE38C008207C0 /* SecondViewController.swift */; };
 		FBAD2E0E1E2BE38C008207C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FBAD2E0C1E2BE38C008207C0 /* Main.storyboard */; };
 		FBAD2E101E2BE38C008207C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBAD2E0F1E2BE38C008207C0 /* Assets.xcassets */; };
 		FBAD2E131E2BE38C008207C0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FBAD2E111E2BE38C008207C0 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FB475A371E8828EF00D2EAD3 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
+		413AB9981EA8172100CAB5C5 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
+		413AB99A1EA817AF00CAB5C5 /* XView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XView.swift; sourceTree = "<group>"; };
+		413AB99C1EA8443B00CAB5C5 /* GridProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridProtocol.swift; sourceTree = "<group>"; };
+		419D07F11EA4561100D04565 /* StatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		FBAD2E031E2BE38C008207C0 /* Assignment4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Assignment4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBAD2E061E2BE38C008207C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FBAD2E081E2BE38C008207C0 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		FBAD2E0A1E2BE38C008207C0 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		FBAD2E081E2BE38C008207C0 /* InstrumentationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrumentationViewController.swift; sourceTree = "<group>"; };
+		FBAD2E0A1E2BE38C008207C0 /* SimulationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationViewController.swift; sourceTree = "<group>"; };
 		FBAD2E0D1E2BE38C008207C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FBAD2E0F1E2BE38C008207C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FBAD2E121E2BE38C008207C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -58,14 +64,17 @@
 		FBAD2E051E2BE38C008207C0 /* Assignment4 */ = {
 			isa = PBXGroup;
 			children = (
-				FB475A371E8828EF00D2EAD3 /* Grid.swift */,
 				FBAD2E061E2BE38C008207C0 /* AppDelegate.swift */,
-				FBAD2E081E2BE38C008207C0 /* FirstViewController.swift */,
-				FBAD2E0A1E2BE38C008207C0 /* SecondViewController.swift */,
-				FBAD2E0C1E2BE38C008207C0 /* Main.storyboard */,
 				FBAD2E0F1E2BE38C008207C0 /* Assets.xcassets */,
-				FBAD2E111E2BE38C008207C0 /* LaunchScreen.storyboard */,
+				413AB9981EA8172100CAB5C5 /* Grid.swift */,
+				413AB99C1EA8443B00CAB5C5 /* GridProtocol.swift */,
 				FBAD2E141E2BE38C008207C0 /* Info.plist */,
+				FBAD2E111E2BE38C008207C0 /* LaunchScreen.storyboard */,
+				FBAD2E0C1E2BE38C008207C0 /* Main.storyboard */,
+				FBAD2E081E2BE38C008207C0 /* InstrumentationViewController.swift */,
+				FBAD2E0A1E2BE38C008207C0 /* SimulationViewController.swift */,
+				419D07F11EA4561100D04565 /* StatisticsViewController.swift */,
+				413AB99A1EA817AF00CAB5C5 /* XView.swift */,
 			);
 			path = Assignment4;
 			sourceTree = "<group>";
@@ -143,10 +152,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBAD2E0B1E2BE38C008207C0 /* SecondViewController.swift in Sources */,
+				419D07F21EA4561100D04565 /* StatisticsViewController.swift in Sources */,
 				FBAD2E071E2BE38C008207C0 /* AppDelegate.swift in Sources */,
-				FBAD2E091E2BE38C008207C0 /* FirstViewController.swift in Sources */,
-				FB475A381E8828EF00D2EAD3 /* Grid.swift in Sources */,
+				419D07FE1EA813BA00D04565 /* InstrumentationViewController.swift in Sources */,
+				413AB99B1EA817AF00CAB5C5 /* XView.swift in Sources */,
+				413AB9991EA8172100CAB5C5 /* Grid.swift in Sources */,
+				419D07FF1EA813C100D04565 /* SimulationViewController.swift in Sources */,
+				413AB99D1EA8443B00CAB5C5 /* GridProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

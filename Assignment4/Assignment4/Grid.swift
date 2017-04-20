@@ -1,43 +1,24 @@
 //
 //  Grid.swift
 //
-public typealias GridPosition = (row: Int, col: Int)
-public typealias GridSize = (rows: Int, cols: Int)
+import Foundation
+
 
 fileprivate func norm(_ val: Int, to size: Int) -> Int { return ((val % size) + size) % size }
 
-public enum CellState {
-    case alive, empty, born, died
-    
-    public var isAlive: Bool {
-        switch self {
-        case .alive, .born: return true
-        default: return false
-        }
-    }
-}
-
-public protocol GridProtocol {
-    init(_ rows: Int, _ cols: Int, cellInitializer: (GridPosition) -> CellState)
-    var description: String { get }
-    var size: GridSize { get }
-    subscript (row: Int, col: Int) -> CellState { get set }
-    func next() -> Self 
-}
-
-public let lazyPositions = { (size: GridSize) in
+fileprivate let lazyPositions = { (size: GridSize) in
     return (0 ..< size.rows)
         .lazy
         .map { zip( [Int](repeating: $0, count: size.cols) , 0 ..< size.cols ) }
         .flatMap { $0 }
-        .map { GridPosition($0) }
+        .map { GridPosition(row: $0.0,col: $0.1) }
 }
 
 
-let offsets: [GridPosition] = [
-    (row: -1, col:  -1), (row: -1, col:  0), (row: -1, col:  1),
-    (row:  0, col:  -1),                     (row:  0, col:  1),
-    (row:  1, col:  -1), (row:  1, col:  0), (row:  1, col:  1)
+fileprivate let offsets: [GridPosition] = [
+    GridPosition(row: -1, col:  -1), GridPosition(row: -1, col:  0), GridPosition(row: -1, col:  1),
+    GridPosition(row:  0, col:  -1),                                 GridPosition(row:  0, col:  1),
+    GridPosition(row:  1, col:  -1), GridPosition(row:  1, col:  0), GridPosition(row:  1, col:  1)
 ]
 
 extension GridProtocol {
@@ -61,27 +42,38 @@ extension GridProtocol {
         }
     }
     
-    public func next() -> Self {
-        var nextGrid = Self(size.rows, size.cols) { _, _ in .empty }
+    public func next() -> Grid {
+        var nextGrid = Grid(size) { _ in .empty }
         lazyPositions(self.size).forEach { nextGrid[$0.row, $0.col] = self.nextState(of: $0) }
         return nextGrid
     }
 }
 
-public struct Grid: GridProtocol {
+public struct Grid: GridProtocol, GridViewDataSource {
+
     private var _cells: [[CellState]]
     public let size: GridSize
+    
+    public init(_ size: GridSize, cellInitializer: (GridPosition) -> CellState = { _ in .empty }) {
+        _cells = [[CellState]](
+            repeatElement(
+                [CellState]( repeatElement(.empty, count: size.rows)),
+                count: size.cols
+            )
+        )
+
+        self.size=size
+        
+        lazyPositions(self.size).forEach { self[$0.row, $0.col] = cellInitializer($0) }
+    }
+    
+
 
     public subscript (row: Int, col: Int) -> CellState {
         get { return _cells[norm(row, to: size.rows)][norm(col, to: size.cols)] }
         set { _cells[norm(row, to: size.rows)][norm(col, to: size.cols)] = newValue }
     }
-    
-    public init(_ rows: Int, _ cols: Int, cellInitializer: (GridPosition) -> CellState = { _, _ in .empty }) {
-        _cells = [[CellState]](repeatElement( [CellState](repeatElement(.empty, count: rows)), count: cols))
-        size = GridSize(rows, cols)
-        lazyPositions(self.size).forEach { self[$0.row, $0.col] = cellInitializer($0) }
-    }
+
 }
 
 extension Grid: Sequence {
@@ -136,8 +128,78 @@ extension Grid: Sequence {
 public extension Grid {
     public static func gliderInitializer(pos: GridPosition) -> CellState {
         switch pos {
-        case (0, 1), (1, 2), (2, 0), (2, 1), (2, 2): return .alive
+        case GridPosition(row: 0, col: 1), GridPosition(row: 1, col: 2),GridPosition(row: 2, col: 0), GridPosition(row: 2, col: 1), GridPosition(row: 2, col: 2): return .alive
         default: return .empty
         }
+    }
+}
+
+protocol EngineDelegate {
+    func engineDidUpdate(withGrid: GridProtocol)
+}
+
+protocol EngineProtocol {
+    init(_ rows: Int, _ cols:Int)
+    var refreshRate: Double { get set }
+    var refreshTimer: Timer? { get set }
+    var timerInterval: Double { get set }
+    var rows: Int { get set }
+    var cols: Int { get set }
+    var grid: GridProtocol { get set }
+    var delegate: EngineDelegate? { get set }
+    var updateClosure: ((Grid) -> Void)? { get set }
+    func step() -> GridProtocol
+}
+
+class standardEngine: EngineProtocol {
+    var grid: GridProtocol
+    var refreshTimer: Timer?
+    var refreshRate: Double = 0.0
+    var rows: Int
+    var cols: Int 
+    var updateClosure: ((Grid) -> Void)?
+
+    static var engine: standardEngine = standardEngine(10,10)
+
+    var delegate: EngineDelegate?
+    
+    var timerInterval: TimeInterval = 0.0 {
+        didSet {
+            if timerInterval > 0.0 {
+                if #available(iOS 10.0, *) {
+                    refreshTimer = Timer.scheduledTimer(
+                        withTimeInterval: timerInterval,
+                        repeats: true
+                    ) { (t: Timer) in
+                        _ = self.step()
+                    }
+                } else {
+                    // Fallback on earlier versions
+                }
+            }
+            else {
+                refreshTimer?.invalidate()
+                refreshTimer=nil
+            }
+        }
+    }
+    
+    required init(_ rows: Int, _ cols: Int) {
+        self.grid = Grid(GridSize(rows: rows, cols: cols))
+    }
+    
+    
+    func step() -> GridProtocol {
+        let newGrid = grid.next()
+        grid = newGrid
+        //         updateClosure?(self.grid)
+        delegate?.engineDidUpdate(withGrid: grid)
+        //          let nc = NotificationCenter.default
+        //          let name = Notification.Name(rawValue: "EngineUpdate")
+        //          let n = Notification(name: name,
+        //                               object: nil,
+        //                               userInfo: ["engine" : self])
+        //                               nc.post(n)
+        return grid
     }
 }
