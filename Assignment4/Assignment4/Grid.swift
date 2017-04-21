@@ -133,6 +133,7 @@ public extension Grid {
     }
 }
 
+//MARK: standardEngine, EngineDelegate, EngineProtocol task 3
 protocol EngineDelegate {
     func engineDidUpdate(withGrid: GridProtocol)
 }
@@ -144,14 +145,12 @@ protocol EngineProtocol {
     var cols: Int { get set }
     var grid: GridProtocol { get set }
     var delegate: EngineDelegate? { get set }
-    var updateClosure: ((Grid) -> Void)? { get set }
     func step() -> GridProtocol
 }
 
+
 class standardEngine: EngineProtocol {
-//    var rows: Int = 10
-//    var cols: Int = 10
-    static var engine: standardEngine = standardEngine(rows: 10, cols: 10, refreshRate: 1.0	)
+    public static var engine: standardEngine = standardEngine(rows: 20, cols: 20, refreshRate: 0.0	)
     var grid: GridProtocol
     var refreshTimer: Timer?
     var refreshRate: Double = 0.0{
@@ -174,7 +173,6 @@ class standardEngine: EngineProtocol {
             }
         }
     }
-    var updateClosure: ((Grid) -> Void)?
     var onOff = false
     var rows: Int
     var cols: Int
@@ -217,17 +215,19 @@ class standardEngine: EngineProtocol {
     func updateRows(row: Int){
         standardEngine.engine.rows = row
         self.rows = row
+        print (self.rows)
+        print (self.cols)
         grid = Grid(GridSize(rows: self.rows, cols: self.cols))
-        delegate?.engineDidUpdate(withGrid: grid)
         engineUpdateNC()
+        delegate?.engineDidUpdate(withGrid: grid)
     }
     
     func updateCols(col: Int){
         standardEngine.engine.cols = col
         self.cols = col
         grid = Grid(GridSize(rows: self.rows, cols: self.cols))
-        delegate?.engineDidUpdate(withGrid: grid)
         engineUpdateNC()
+        delegate?.engineDidUpdate(withGrid: grid)
     }
     
 
@@ -249,14 +249,8 @@ class standardEngine: EngineProtocol {
     func step() -> GridProtocol {
         let newGrid = grid.next()
         grid = newGrid
-        //         updateClosure?(self.grid)
+        engineUpdateNC()
         delegate?.engineDidUpdate(withGrid: grid)
-        //          let nc = NotificationCenter.default
-        //          let name = Notification.Name(rawValue: "EngineUpdate")
-        //          let n = Notification(name: name,
-        //                               object: nil,
-        //                               userInfo: ["engine" : self])
-        //                               nc.post(n)
         return grid
     }
 }

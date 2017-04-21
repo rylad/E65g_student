@@ -11,34 +11,26 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
     
 
     @IBOutlet weak var gridView: XView!
-    @IBOutlet weak var sizeStepper: UIStepper!
-    
+    @IBOutlet weak var step: UIButton!
+
+    var delegate: EngineDelegate?
     var engine: EngineProtocol!
     var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        let size = gridView.gridSize
-//        engine = standardEngine(rows: size, cols: size, refreshRate: Double)
         engine = standardEngine.mapNew()
         engine.delegate = self
         gridView.drawGrid = self
         self.gridView.gridRows = engine.rows
         self.gridView.gridCols = engine.cols
         
-//        sizeStepper.value = Double(engine.grid.size.rows)
-//        let nc = NotificationCenter.default
-//        let name = Notification.Name(rawValue: "EngineUpdate")
-//        nc.addObserver(
-//            forName: name,
-//            object: nil,
-//            queue: nil) { (n) in
-//                self.gridView.setNeedsDisplay()
-//        }
         
     }
     
     func engineDidUpdate(withGrid: GridProtocol) {
+        self.gridView.gridRows = standardEngine.mapNew().rows
+        self.gridView.gridCols = standardEngine.mapNew().cols
         self.gridView.setNeedsDisplay()
     }
     
@@ -54,23 +46,9 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
     
     //MARK: Stepper Event Handling
     @IBAction func step(_ sender: UIStepper) {
-        engine.grid = engine.grid.next()
-        gridView.setNeedsDisplay()
+        engine.grid = engine.step()
+
     }
     
-    //MARK: AlertController Handling
-    func showErrorAlert(withMessage msg:String, action: (() -> Void)? ) {
-        let alert = UIAlertController(
-            title: "Alert",
-            message: msg,
-            preferredStyle: .alert
-        )
-        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-            alert.dismiss(animated: true) { }
-            OperationQueue.main.addOperation { action?() }
-        }
-        alert.addAction(okAction)
-        self.present(alert, animated: true, completion: nil)
-    }
 }
 
