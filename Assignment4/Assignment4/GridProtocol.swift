@@ -26,6 +26,15 @@ public enum CellState {
         default: return false
         }
     }
+    
+    func description() -> String {
+        switch self {
+        case .alive: return "alive"
+        case .empty: return "empty"
+        case .born: return "born"
+        case .died: return "died"
+        }
+    }
 }
 
 public protocol GridProtocol: CustomStringConvertible {

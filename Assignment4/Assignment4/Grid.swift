@@ -63,7 +63,6 @@ public struct Grid: GridProtocol, GridViewDataSource {
         )
 
         self.size=size
-        
         lazyPositions(self.size).forEach { self[$0.row, $0.col] = cellInitializer($0) }
     }
     
@@ -139,10 +138,8 @@ protocol EngineDelegate {
 }
 
 protocol EngineProtocol {
-    init(_ rows: Int, _ cols:Int)
     var refreshRate: Double { get set }
     var refreshTimer: Timer? { get set }
-    var timerInterval: Double { get set }
     var rows: Int { get set }
     var cols: Int { get set }
     var grid: GridProtocol { get set }
@@ -152,14 +149,36 @@ protocol EngineProtocol {
 }
 
 class standardEngine: EngineProtocol {
+//    var rows: Int = 10
+//    var cols: Int = 10
+    static var engine: standardEngine = standardEngine(rows: 10, cols: 10, refreshRate: 1.0	)
     var grid: GridProtocol
     var refreshTimer: Timer?
-    var refreshRate: Double = 0.0
-    var rows: Int
-    var cols: Int 
+    var refreshRate: Double = 0.0{
+        didSet {
+        if (onOff && (refreshRate > 0.0)) {
+            if #available(iOS 10.0, *) {
+                refreshTimer = Timer.scheduledTimer(
+                    withTimeInterval: refreshRate,
+                    repeats: true
+                ) { (t: Timer) in
+                    _ = self.step()
+                }
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+        else {
+            refreshTimer?.invalidate()
+            refreshTimer = nil
+            }
+        }
+    }
     var updateClosure: ((Grid) -> Void)?
+    var onOff = false
+    var rows: Int
+    var cols: Int
 
-    static var engine: standardEngine = standardEngine(10,10)
 
     var delegate: EngineDelegate?
     
@@ -184,10 +203,48 @@ class standardEngine: EngineProtocol {
         }
     }
     
-    required init(_ rows: Int, _ cols: Int) {
+    required init(rows: Int, cols: Int, refreshRate: Double) {
         self.grid = Grid(GridSize(rows: rows, cols: cols))
+        self.rows = rows
+        self.cols = cols
+        self.refreshRate = refreshRate
     }
     
+    class func mapNew() -> standardEngine{
+        return engine
+    }
+    
+    func updateRows(row: Int){
+        standardEngine.engine.rows = row
+        self.rows = row
+        grid = Grid(GridSize(rows: self.rows, cols: self.cols))
+        delegate?.engineDidUpdate(withGrid: grid)
+        engineUpdateNC()
+    }
+    
+    func updateCols(col: Int){
+        standardEngine.engine.cols = col
+        self.cols = col
+        grid = Grid(GridSize(rows: self.rows, cols: self.cols))
+        delegate?.engineDidUpdate(withGrid: grid)
+        engineUpdateNC()
+    }
+    
+
+    
+    func toggleOn(on: Bool){
+        onOff=on
+        refreshRate=standardEngine.engine.refreshRate
+    }
+    
+    func engineUpdateNC(){
+          let nc = NotificationCenter.default
+          let name = Notification.Name(rawValue: "EngineUpdate")
+          let n = Notification(name: name,
+                               object: nil,
+                               userInfo: ["engine" : self])
+                               nc.post(n)
+    }
     
     func step() -> GridProtocol {
         let newGrid = grid.next()

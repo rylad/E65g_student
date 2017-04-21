@@ -12,16 +12,29 @@ class InstrumentationViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var rows: UITextField!
     @IBOutlet weak var cols: UITextField!
+    @IBOutlet weak var rowStep: UIStepper!
+    @IBOutlet weak var colStep: UIStepper!
+    @IBOutlet weak var refreshRate: UISlider!
+    @IBOutlet weak var toggleOn: UISwitch!
     
     var engine: EngineProtocol!
-    var timer: Timer?
+//    var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let rows = 5
-        let cols = 5
-        engine = standardEngine(rows, cols)
+        engine = standardEngine.mapNew()
 
+        
+        rowStep.value = Double(engine.rows)
+        self.rows.text = "\(engine.rows)"
+
+        colStep.value = Double(engine.cols)
+        self.cols.text = "\(engine.cols)"
+        
+        toggleOn.setOn(false, animated: false)
+
+
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,18 +43,26 @@ class InstrumentationViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func rowStep(_ sender: UIStepper) {
-        self.rows.text = sender.value.description
+        let numberRows = Int(sender.value)
+        self.rows.text = String(numberRows)
+        standardEngine.mapNew().updateRows(row: numberRows)
+
     }
     
     @IBAction func colStep(_ sender: UIStepper) {
-        self.cols.text = sender.value.description
-    }
-    
-    @IBAction func timer(_ sender: UISlider) {
-        engine.timerInterval = Double(sender.value)
-    }
-    
-    
+        let numberCols = Int(sender.value)
+        self.cols.text = String(numberCols)
+        standardEngine.mapNew().updateCols(col: numberCols)
 
+    }
+    
+    @IBAction func refreshRate(_ sender: UISlider) {
+        engine.refreshTimer?.invalidate()
+        engine.refreshRate = Double(Double(sender.value))
+    }
+
+    @IBAction func toggleOn(_ sender: UISwitch) {
+        standardEngine.mapNew().toggleOn(on: toggleOn.isOn)
+    }
 
 }

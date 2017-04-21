@@ -2,7 +2,7 @@
 //  XView.swift
 //  Lecture6
 //
-//  Created by Van Simmons on 3/6/17.
+//  Created by Van Simmons on 3/6/17. Updated by Sean Valois 4/20/217
 //  Copyright © 2017 Harvard University. All rights reserved.
 //
 import UIKit
@@ -14,80 +14,103 @@ public protocol GridViewDataSource {
 @IBDesignable class XView: UIView {
     
     @IBInspectable var fillColor = UIColor.darkGray
-    @IBInspectable var gridSize: Int = 3
-    // Updated since class
-    var gridDataSource: GridViewDataSource?
+    @IBInspectable var gridRows: Int = 10
+    @IBInspectable var gridCols: Int = 10
+
+    @IBInspectable var livingColor: UIColor = UIColor.green
+    @IBInspectable var emptyColor: UIColor = UIColor.clear
+    @IBInspectable var bornColor: UIColor = UIColor.yellow
+    @IBInspectable var diedColor: UIColor = UIColor.black
+    @IBInspectable var gridColor: UIColor = UIColor.black
+    @IBInspectable var gridWidth: CGFloat = CGFloat(1.0)
+    
+    var drawGrid: GridViewDataSource?
     
     var xColor = UIColor.black
     var xProportion = CGFloat(1.0)
     var widthProportion = CGFloat(0.05)
     
     override func draw(_ rect: CGRect) {
-        drawOvals(rect)
-        drawLines(rect)
-    }
-    
-    func drawOvals(_ rect: CGRect) {
-        let size = CGSize(
-            width: rect.size.width / CGFloat(gridSize),
-            height: rect.size.height / CGFloat(gridSize)
+        let drawSize = CGSize(
+            width: rect.size.width / CGFloat(gridCols),
+            height: rect.size.height / CGFloat(gridRows)
         )
         let base = rect.origin
-        (0 ..< gridSize).forEach { i in
-            (0 ..< gridSize).forEach { j in
-                // Inset the oval 2 points from the left and top edges
-                let ovalOrigin = CGPoint(
-                    x: base.x + (CGFloat(j) * size.width) + 2.0,
-                    y: base.y + (CGFloat(i) * size.height + 2.0)
+        
+        (0 ... gridCols).forEach {
+            drawLine(
+                start: CGPoint(
+                    x: rect.origin.x + (CGFloat($0)*drawSize.width),
+                    y: rect.origin.y),
+                end: CGPoint(
+                    x: rect.origin.x + (CGFloat($0)*drawSize.width),
+                    y: rect.origin.y + rect.size.height),
+                lineWidth: gridWidth,
+                lineColor: gridColor)
+        }
+        (0 ... gridRows).forEach {
+            drawLine(
+                start: CGPoint(
+                    x: rect.origin.x,
+                    y: rect.origin.y + (CGFloat($0)*drawSize.height)),
+                end: CGPoint(
+                    x: rect.origin.x + rect.size.width,
+                    y: rect.origin.y + (CGFloat($0)*drawSize.height)),
+                lineWidth: gridWidth,
+                lineColor: gridColor)
+        }
+        
+        (0 ..< gridCols).forEach { i in
+            (0 ..< gridRows).forEach { j in
+                let origin = CGPoint(
+                    x: base.x + (CGFloat(i) * drawSize.width) + gridWidth,
+                    y: base.y + (CGFloat(j) * drawSize.height) + gridWidth
                 )
-                // Make the oval draw 2 points short of the right and bottom edges
-                let ovalSize = CGSize(
-                    width: size.width - 4.0,
-                    height: size.height - 4.0
+                
+                let subDrawSize = CGSize(
+                    width: rect.size.width / CGFloat(gridCols) - 2*gridWidth,
+                    height: rect.size.height / CGFloat(gridRows) - 2*gridWidth
                 )
-                let ovalRect = CGRect( origin: ovalOrigin, size: ovalSize )
-                if let grid = gridDataSource, grid[i,j].isAlive {
-                    drawOval(ovalRect)
+                
+                let subRect = CGRect(
+                    origin: origin,
+                    size: subDrawSize
+                )
+                let path = UIBezierPath(ovalIn: subRect)
+                
+                
+                if let drawGrid = drawGrid {
+                    
+                    // Set the color based on the CellState using the description method
+                    switch drawGrid[(j,i)].description()
+                    {
+                    case "empty":
+                        emptyColor.setFill()
+                    case "alive":
+                        livingColor.setFill()
+                    case "born":
+                        bornColor.setFill()
+                    case "dead":
+                        diedColor.setFill()
+                    default:
+                        emptyColor.setFill()
+                    }
+                    
+                    path.fill()
                 }
             }
         }
     }
     
-    func drawOval(_ ovalRect: CGRect) {
-        let path = UIBezierPath(ovalIn: ovalRect)
-        fillColor.setFill()
-        path.fill()
-    }
     
-    func drawLines(_ rect: CGRect) {
-        //create the path
-        (0 ..< (gridSize + 1)).forEach {
-            drawLine(
-                start: CGPoint(x: CGFloat($0)/CGFloat(gridSize) * rect.size.width, y: 0.0),
-                end:   CGPoint(x: CGFloat($0)/CGFloat(gridSize) * rect.size.width, y: rect.size.height)
-            )
-            
-            drawLine(
-                start: CGPoint(x: 0.0, y: CGFloat($0)/CGFloat(gridSize) * rect.size.height ),
-                end: CGPoint(x: rect.size.width, y: CGFloat($0)/CGFloat(gridSize) * rect.size.height)
-            )
-        }
-    }
+
     
-    func drawLine(start:CGPoint, end: CGPoint) {
+    func drawLine(start: CGPoint, end: CGPoint, lineWidth: CGFloat, lineColor: UIColor) {
         let path = UIBezierPath()
         
-        //set the path's line width to the height of the stroke
         path.lineWidth = 2.0
-        
-        //move the initial point of the path
-        //to the start of the horizontal stroke
         path.move(to: start)
-        
-        //add a point to the path at the end of the stroke
         path.addLine(to: end)
-        
-        //draw the stroke
         UIColor.cyan.setStroke()
         path.stroke()
     }
@@ -102,6 +125,8 @@ public protocol GridViewDataSource {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         lastTouchedPosition = nil
+        let engine = standardEngine.mapNew()
+        engine.engineUpdateNC()
     }
     
     // Updated since class
@@ -122,8 +147,8 @@ public protocol GridViewDataSource {
             else { return pos }
         //****************************************
         
-        if gridDataSource != nil {
-            gridDataSource![pos.row, pos.col] = gridDataSource![pos.row, pos.col].isAlive ? .empty : .alive
+        if drawGrid != nil {
+            drawGrid![pos.row, pos.col] = drawGrid![pos.row, pos.col].isAlive ? .empty : .alive
             setNeedsDisplay()
         }
         return pos
@@ -132,11 +157,11 @@ public protocol GridViewDataSource {
     func convert(touch: UITouch) -> GridPosition {
         let touchY = touch.location(in: self).y
         let gridHeight = frame.size.height
-        let row = touchY / gridHeight * CGFloat(gridSize)
+        let row = touchY / gridHeight * CGFloat(gridRows)
         
         let touchX = touch.location(in: self).x
         let gridWidth = frame.size.width
-        let col = touchX / gridWidth * CGFloat(gridSize)
+        let col = touchX / gridWidth * CGFloat(gridCols)
         
         return GridPosition(row: Int(row), col: Int(col))
     }

@@ -18,20 +18,23 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let size = gridView.gridSize
-        engine = standardEngine(size, size)
-        engine.delegate = standardEngine.delegate
-        gridView.gridDataSource = self
-        sizeStepper.value = Double(engine.grid.size.rows)
+//        let size = gridView.gridSize
+//        engine = standardEngine(rows: size, cols: size, refreshRate: Double)
+        engine = standardEngine.mapNew()
+        engine.delegate = self
+        gridView.drawGrid = self
+        self.gridView.gridRows = engine.rows
+        self.gridView.gridCols = engine.cols
         
-        let nc = NotificationCenter.default
-        let name = Notification.Name(rawValue: "EngineUpdate")
-        nc.addObserver(
-            forName: name,
-            object: nil,
-            queue: nil) { (n) in
-                self.gridView.setNeedsDisplay()
-        }
+//        sizeStepper.value = Double(engine.grid.size.rows)
+//        let nc = NotificationCenter.default
+//        let name = Notification.Name(rawValue: "EngineUpdate")
+//        nc.addObserver(
+//            forName: name,
+//            object: nil,
+//            queue: nil) { (n) in
+//                self.gridView.setNeedsDisplay()
+//        }
         
     }
     
@@ -48,19 +51,6 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
         super.didReceiveMemoryWarning()
     }
     
-    
-    @IBAction func next(_ sender: Any) {
-        engine.grid = engine.grid.next()
-        gridView.setNeedsDisplay()
-    }
-    
-    @IBAction func stop(_ sender: Any) {
-        engine.timerInterval = 0.0
-    }
-    
-    @IBAction func start(_ sender: Any) {
-        engine.timerInterval = 1.0
-    }
     
     //MARK: Stepper Event Handling
     @IBAction func step(_ sender: UIStepper) {
