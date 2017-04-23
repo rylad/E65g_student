@@ -44,11 +44,20 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
     }
     
     
-    //MARK: Stepper Event Handling
+    //MARK: Button Event Handling
     @IBAction func step(_ sender: UIStepper) {
         engine.grid = engine.step()
 
     }
+    
+    @IBAction func reset(_ sender: UIButton) {
+
+    }
+    
+    @IBAction func save(_ sender: UIButton) {
+    }
+    
+    
     
 }
 

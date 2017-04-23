@@ -8,11 +8,12 @@
 
 import UIKit
 
-class InstrumentationViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class InstrumentationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     
-    @IBOutlet var tableView: UIView!
+    @IBOutlet weak var tableView: UITableView!
     
+
 //MARK: DELETE ME TEST DATA
     var sectionHeaders = [
         "One", "Two", "Three", "Four", "Five", "Six"
@@ -99,15 +100,26 @@ class InstrumentationViewController: UIViewController, UITextFieldDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = indexPath.item % 2 == 0 ? "basic" : "green"
+        let identifier = indexPath.item % 2 == 0 ? "basic" : "gray"
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         let label = cell.contentView.subviews.first as! UILabel
         label.text = data[indexPath.section][indexPath.item]
         
         return cell
     }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionHeaders[section]
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            var newData = data[indexPath.section]
+            newData.remove(at: indexPath.row)
+            data[indexPath.section] = newData
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.reloadData()
+        }
     }
     
 //MARK: Real Stuff
@@ -123,6 +135,7 @@ class InstrumentationViewController: UIViewController, UITextFieldDelegate, UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.isNavigationBarHidden=true
         engine = standardEngine.mapNew()
         rowStep.value = Double(engine.rows)
         self.rows.text = "\(engine.rows)"
@@ -131,6 +144,9 @@ class InstrumentationViewController: UIViewController, UITextFieldDelegate, UITa
         toggleOn.setOn(false, animated: false)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden=true
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -200,5 +216,19 @@ class InstrumentationViewController: UIViewController, UITextFieldDelegate, UITa
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
     }
-
+    
+    //MARK: Segue Handling
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let indexPath = tableView.indexPathForSelectedRow
+        if let indexPath = indexPath {
+            let fruitName = data[indexPath.section][indexPath.row]
+            if let vc = segue.destination as? GridEditorViewController {
+                vc.fruitName = fruitName
+                vc.saveClosure = { newValue in
+                    self.data[indexPath.section][indexPath.row] = newValue
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
 }
