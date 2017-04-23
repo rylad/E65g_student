@@ -8,8 +8,108 @@
 
 import UIKit
 
-class InstrumentationViewController: UIViewController, UITextFieldDelegate {
+class InstrumentationViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
 
+    
+    
+//MARK: DELETE ME TEST DATA
+    var sectionHeaders = [
+        "One", "Two", "Three", "Four", "Five", "Six"
+    ]
+    
+    var data = [
+        [
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date"
+        ],
+        [
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana"
+        ],
+        [
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry"
+        ],
+        [
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Kiwi",
+            "Blueberry"
+        ]
+    ]
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return data.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data[section].count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let identifier = indexPath.item % 2 == 0 ? "basic" : "green"
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        let label = cell.contentView.subviews.first as! UILabel
+        label.text = data[indexPath.section][indexPath.item]
+        
+        return cell
+    }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sectionHeaders[section]
+    }
+    
+//MARK: Real Stuff
     @IBOutlet weak var rows: UITextField!
     @IBOutlet weak var cols: UITextField!
     @IBOutlet weak var rowStep: UIStepper!
