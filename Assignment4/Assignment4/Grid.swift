@@ -150,7 +150,7 @@ protocol EngineProtocol {
 
 
 class standardEngine: EngineProtocol {
-    public static var engine: standardEngine = standardEngine(rows: 20, cols: 20, refreshRate: 0.0	)
+    public static var engine: standardEngine = standardEngine(rows: 10, cols: 10, refreshRate: 0.0	)
     var grid: GridProtocol
     var refreshTimer: Timer?
     var refreshRate: Double = 0.0{
