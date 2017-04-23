@@ -188,6 +188,7 @@
                         <outlet property="refreshRate" destination="Wu3-Dp-4Fo" id="Su2-QH-w9R"/>
                         <outlet property="rowStep" destination="db2-eL-D7A" id="yxi-VE-2lR"/>
                         <outlet property="rows" destination="0pG-sE-ASS" id="H5W-vP-Cej"/>
+                        <outlet property="tableView" destination="tsR-hK-woN" id="Zl1-jA-mMD"/>
                         <outlet property="toggleOn" destination="hlO-Br-PLR" id="ypI-zE-ok1"/>
                     </connections>
                 </viewController>

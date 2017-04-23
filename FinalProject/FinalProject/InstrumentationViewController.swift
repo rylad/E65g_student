@@ -11,6 +11,7 @@ import UIKit
 class InstrumentationViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
 
     
+    @IBOutlet var tableView: UIView!
     
 //MARK: DELETE ME TEST DATA
     var sectionHeaders = [
