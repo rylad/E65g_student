@@ -78,7 +78,11 @@ class InstrumentationViewController: UIViewController, UITextFieldDelegate {
     //MARK: Misc button handling
     @IBAction func refreshRate(_ sender: UISlider) {
         engine.refreshTimer?.invalidate()
-        engine.refreshRate = Double(Double(sender.value))
+        print (sender.value)
+        print (Double(sender.value))
+        print (Double(Double(sender.value)))
+        //engine.refreshRate = Double(Double(sender.value))
+        engine.refreshRate = Double(sender.value)
     }
 
     @IBAction func toggleOn(_ sender: UISwitch) {

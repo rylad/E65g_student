@@ -12,7 +12,7 @@
         <!--Instrumentation-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController id="9pv-A4-QxB" userLabel="Instrumentation" customClass="InstrumentationViewController" customModule="Assignment4" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9pv-A4-QxB" userLabel="Instrumentation" customClass="InstrumentationViewController" customModule="FinalProject" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ia1-K6-d13"/>
                         <viewControllerLayoutGuide type="bottom" id="4ug-Mw-9AY"/>
@@ -170,7 +170,7 @@
         <!--Statistics-->
         <scene sceneID="RFb-9B-Lmj">
             <objects>
-                <viewController id="Z3A-ud-Id4" userLabel="Statistics" customClass="StatisticsViewController" customModule="Assignment4" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Z3A-ud-Id4" userLabel="Statistics" customClass="StatisticsViewController" customModule="FinalProject" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Fg5-6h-fJG"/>
                         <viewControllerLayoutGuide type="bottom" id="awE-Rj-bYM"/>
@@ -317,7 +317,7 @@
         <!--Simulation-->
         <scene sceneID="wg7-f3-ORb">
             <objects>
-                <viewController id="8rJ-Kc-sve" userLabel="Simulation" customClass="SimulationViewController" customModule="Assignment4" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="8rJ-Kc-sve" userLabel="Simulation" customClass="SimulationViewController" customModule="FinalProject" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="L7p-HK-0SC"/>
                         <viewControllerLayoutGuide type="bottom" id="Djb-ko-YwX"/>
@@ -326,7 +326,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Th4-za-RvR" userLabel="GridView" customClass="XView" customModule="Assignment4">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Th4-za-RvR" userLabel="GridView" customClass="XView" customModule="FinalProject">
                                 <rect key="frame" x="67.5" y="213.5" width="240" height="240"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
