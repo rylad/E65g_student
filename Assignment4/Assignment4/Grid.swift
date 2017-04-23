@@ -158,7 +158,7 @@ class standardEngine: EngineProtocol {
         if (onOff && (refreshRate > 0.0)) {
             if #available(iOS 10.0, *) {
                 refreshTimer = Timer.scheduledTimer(
-                    withTimeInterval: refreshRate,
+                    withTimeInterval: 10.01 - refreshRate,
                     repeats: true
                 ) { (t: Timer) in
                     _ = self.step()
@@ -180,26 +180,26 @@ class standardEngine: EngineProtocol {
 
     var delegate: EngineDelegate?
     
-    var timerInterval: TimeInterval = 0.0 {
-        didSet {
-            if timerInterval > 0.0 {
-                if #available(iOS 10.0, *) {
-                    refreshTimer = Timer.scheduledTimer(
-                        withTimeInterval: timerInterval,
-                        repeats: true
-                    ) { (t: Timer) in
-                        _ = self.step()
-                    }
-                } else {
-                    // Fallback on earlier versions
-                }
-            }
-            else {
-                refreshTimer?.invalidate()
-                refreshTimer=nil
-            }
-        }
-    }
+//    var timerInterval: TimeInterval = 0.0 {
+//        didSet {
+//            if timerInterval > 0.0 {
+//                if #available(iOS 10.0, *) {
+//                    refreshTimer = Timer.scheduledTimer(
+//                        withTimeInterval: timerInterval,
+//                        repeats: true
+//                    ) { (t: Timer) in
+//                        _ = self.step()
+//                    }
+//                } else {
+//                    // Fallback on earlier versions
+//                }
+//            }
+//            else {
+//                refreshTimer?.invalidate()
+//                refreshTimer=nil
+//            }
+//        }
+//    }
     
     required init(rows: Int, cols: Int, refreshRate: Double) {
         self.grid = Grid(GridSize(rows: rows, cols: cols))
