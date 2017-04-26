@@ -196,7 +196,7 @@ class standardEngine: EngineProtocol {
         self.rows = row
         print (self.rows)
         print (self.cols)
-        grid = Grid(GridSize(rows: self.rows, cols: self.cols))
+        grid = Grid(GridSize(rows: self.rows, cols: self.rows))
         engineUpdateNC()
         delegate?.engineDidUpdate(withGrid: grid)
     }
@@ -204,7 +204,7 @@ class standardEngine: EngineProtocol {
     func updateCols(col: Int){
         standardEngine.engine.cols = col
         self.cols = col
-        grid = Grid(GridSize(rows: self.rows, cols: self.cols))
+        grid = Grid(GridSize(rows: self.cols, cols: self.cols))
         engineUpdateNC()
         delegate?.engineDidUpdate(withGrid: grid)
     }
