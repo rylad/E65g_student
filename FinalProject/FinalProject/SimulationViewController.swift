@@ -51,7 +51,7 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
     }
     
     @IBAction func reset(_ sender: UIButton) {
-
+        engine.grid = engine.reset()
     }
     
     @IBAction func save(_ sender: UIButton) {

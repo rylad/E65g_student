@@ -21,21 +21,12 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     @IBOutlet weak var tableView: UITableView!
     
     let finalProjectURL = "https://dl.dropboxusercontent.com/u/7544475/S65g.json"
-    
-    var gridTypes = [String]()
-    var gridContents = [[Int]]()
+   
+    var gridNames = [String]()
     var jsonContent = NSArray()
     var engine: EngineProtocol!
-
-    class gridTypes2{
-        var gName: String
-        var gContents: [[Int]]
-        
-        init(gName: String, gContents: [[Int]]){
-            self.gName = gName
-            self.gContents = gContents
-        }
-    }
+    var fetch: FetchProtocol!
+    var info : GridInfo!
     
     
     override func viewDidLoad() {
@@ -44,10 +35,9 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         engine = standardEngine.mapNew()
         rowStep.value = Double(engine.rows)
         self.rows.text = "\(engine.rows)"
-        colStep.value = Double(engine.cols)
-        self.cols.text = "\(engine.cols)"
+        colStep.value = Double(engine.rows)
+        self.cols.text = "\(engine.rows)"
         toggleOn.setOn(false, animated: false)
-
         
         
         let fetcher = Fetcher()
@@ -67,17 +57,20 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
             while count < jsonArray.count {
                 let jsonDictionary = jsonArray[count] as! NSDictionary
                 let jsonTitle = jsonDictionary["title"] as! String
-                self.gridTypes.append(jsonTitle)
+                self.gridNames.append(jsonTitle)
                 count+=1
+                OperationQueue.main.addOperation {
+                    self.tableView.reloadData()
+                }
             }
-            
-            OperationQueue.main.addOperation {
-                self.tableView.reloadData()
-            }
-            
+        }
+//        
+//            OperationQueue.main.addOperation {
+//                self.tableView.reloadData()
+//            }
+        
         }
 
-    }
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden=true
     
@@ -120,12 +113,12 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         guard let entry = sender.text else { return }
         guard let value = Int(entry) else {
             showErrorAlert(withMessage: "\(entry) is not a valid entry, please try again. (positive numbers only)") {
-                sender.text = "\(self.engine.grid.size.cols)"
+                sender.text = "\(self.engine.grid.size.rows)"
             }
             return
         }
         colStep.value = Double(value)
-        standardEngine.mapNew().updateCols(col: value)
+        standardEngine.mapNew().updateRows(row: value)
     }
     
     //MARK: Misc button handling
@@ -145,7 +138,7 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return gridTypes.count
+        return gridNames.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -154,7 +147,7 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         let label = cell.contentView.subviews.first as! UILabel
         
 //        OperationQueue.main.addOperation(
-        label.text = gridTypes[indexPath.item]
+        label.text = gridNames[indexPath.item]
 //        )
         return cell
     }
@@ -190,18 +183,18 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let indexPath = tableView.indexPathForSelectedRow
         if let indexPath = indexPath{
-                let gridEditorController = segue.destination as! GridEditorViewController
+            let gridEditorController = segue.destination as! GridEditorViewController
             
-                let jsonDictionary = jsonContent[indexPath.item] as! NSDictionary
-                let jsonTitle = jsonDictionary["title"] as! String
-                let jsonContents = jsonDictionary["contents"] as! [[Int]]
-                let gridInfo : gridTypes2 = gridTypes2(gName: jsonTitle, gContents: jsonContents)
-                gridEditorController.gridName = gridInfo.gName
-                gridEditorController.gridContents = gridInfo.gContents
-                let maxSize = gridInfo.gContents.flatMap{return $0}.max()
-                standardEngine.mapNew().updateCols(col: (maxSize)!*2)
-                standardEngine.mapNew().updateRows(row: (maxSize)!*2)
-            
+            let jsonDictionary = jsonContent[indexPath.item] as! NSDictionary
+            let jsonTitle = jsonDictionary["title"] as! String
+            let jsonContents = jsonDictionary["contents"] as! [[Int]]
+            let data: gridInfo = gridInfo(gName: jsonTitle, gContents: jsonContents)
+            gridEditorController.gridName = data.gName
+            gridEditorController.gridContents = data.gContents
+            let maxSize = data.findMax(gContents: data.gContents)
+            standardEngine.mapNew().updateCols(col: (maxSize)*2)
+            standardEngine.mapNew().updateRows(row: (maxSize)*2)
+        
             
             
         }

@@ -22,13 +22,13 @@ public protocol GridViewDataSource {
     @IBInspectable var bornColor: UIColor = UIColor.yellow
     @IBInspectable var diedColor: UIColor = UIColor.black
     @IBInspectable var gridColor: UIColor = UIColor.black
-    @IBInspectable var gridWidth: CGFloat = CGFloat(1.0)
+    @IBInspectable var gridWidth: CGFloat = CGFloat(0.5)
     
     var drawGrid: GridViewDataSource?
-    
-    var xColor = UIColor.black
-    var xProportion = CGFloat(1.0)
-    var widthProportion = CGFloat(0.05)
+//    
+//    var xColor = UIColor.black
+//    var xProportion = CGFloat(1.0)
+//    var widthProportion = CGFloat(0.05)
     
     override func draw(_ rect: CGRect) {
         let drawSize = CGSize(
@@ -106,10 +106,10 @@ public protocol GridViewDataSource {
     func drawLine(start: CGPoint, end: CGPoint, lineWidth: CGFloat, lineColor: UIColor) {
         let path = UIBezierPath()
         
-        path.lineWidth = 2.0
+        path.lineWidth = self.gridWidth
         path.move(to: start)
         path.addLine(to: end)
-        UIColor.cyan.setStroke()
+        self.gridColor.setStroke()
         path.stroke()
     }
     

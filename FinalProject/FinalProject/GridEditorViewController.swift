@@ -15,10 +15,10 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
     var gridContents: [[Int]]?
     var delegate: EngineDelegate?
     var engine: EngineProtocol!
+    var coordinate = [Int]()
     
     @IBOutlet weak var gridView: XView!
     @IBOutlet weak var gridNameTextField: UITextField!
-    @IBOutlet weak var textView: UITextView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,22 +28,28 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
             gridNameTextField.text = gridName
         }
         
-        if let gridContents = gridContents {
-            textView.text = String(describing: gridContents)
-        }
-        
         engine = standardEngine.mapNew()
         engine.delegate = self
         gridView.drawGrid = self
         self.gridView.gridRows = engine.rows
         self.gridView.gridCols = engine.cols
     
+        var count = 0
+        while count < (gridContents?.count)! {
+            var coordinate = gridContents![count]
+            var row = Int(coordinate[0])
+            var col = Int(coordinate[1])
+            engine.grid[row, col] = .alive
+            count+=1
+        }
+
     }
     func engineDidUpdate(withGrid: GridProtocol) {
         self.gridView.gridRows = standardEngine.mapNew().rows
         self.gridView.gridCols = standardEngine.mapNew().cols
         self.gridView.setNeedsDisplay()
     }
+
     
     public subscript (row: Int, col: Int) -> CellState {
         get { return engine.grid[row,col] }

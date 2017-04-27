@@ -3,6 +3,7 @@
 //
 import Foundation
 
+let finalProjectURL = "https://dl.dropboxusercontent.com/u/7544475/S65g.json"
 
 fileprivate func norm(_ val: Int, to size: Int) -> Int { return ((val % size) + size) % size }
 
@@ -133,6 +134,68 @@ public extension Grid {
     }
 }
 
+//public extension Grid {
+//    public static func importedInitializer(pos: GridPosition) -> CellState {
+//        switch pos {
+//            
+//        }
+//    }
+//}
+
+protocol GridInfo{
+    var gName: String { get set }
+    var gContents: [[Int]] { get set }
+
+    func findMax(gContents : [[Int]]) -> Int
+
+}
+
+class gridInfo: GridInfo{
+    var gName: String
+    var gContents: [[Int]]
+
+    init(gName: String, gContents: [[Int]]){
+        self.gName = gName
+        self.gContents = gContents
+    }
+    
+    func findMax(gContents:[[Int]]) -> Int {
+        let max = self.gContents.flatMap{return $0}.max()
+        return max!
+    }
+}
+
+protocol FetchProtocol{
+    var gName: String? { get set }
+    var gContents: [[Int]]? { get set }
+    var gridTypes: [String] { get set }
+    var url: String { get set }
+
+    func findMax(gContents : [[Int]]) -> Int
+}
+
+
+
+class standardFetcher: FetchProtocol {
+    var gName: String?
+    var gContents: [[Int]]?
+    var json: NSArray?
+    var jsonContent: NSArray?
+    //var gridTypes: [String]
+    var gridContents : [[Int]]?
+    var url : String = finalProjectURL
+    
+    var gridTypes = [String]()
+    
+    
+    func findMax(gContents:[[Int]]) -> Int {
+        let max = gContents.flatMap{return $0}.max()
+        return max!
+    }
+}
+
+
+
 //MARK: standardEngine, EngineDelegate, EngineProtocol task 3
 protocol EngineDelegate {
     func engineDidUpdate(withGrid: GridProtocol)
@@ -145,8 +208,12 @@ protocol EngineProtocol {
     var cols: Int { get set }
     var grid: GridProtocol { get set }
     var delegate: EngineDelegate? { get set }
+
+    
     func step() -> GridProtocol
+    func reset() -> GridProtocol
 }
+
 
 
 class standardEngine: EngineProtocol {
@@ -177,6 +244,7 @@ class standardEngine: EngineProtocol {
     var rows: Int
     var cols: Int
 
+    
 
     var delegate: EngineDelegate?
     
@@ -185,6 +253,7 @@ class standardEngine: EngineProtocol {
         self.rows = rows
         self.cols = cols
         self.refreshRate = refreshRate
+
     }
     
     class func mapNew() -> standardEngine{
@@ -232,4 +301,14 @@ class standardEngine: EngineProtocol {
         delegate?.engineDidUpdate(withGrid: grid)
         return grid
     }
+    
+    func reset() -> GridProtocol{
+        let newGrid = Grid(GridSize(rows: self.rows, cols: self.rows))
+        grid = newGrid
+        engineUpdateNC()
+        delegate?.engineDidUpdate(withGrid: grid)
+        return grid
+    }
+    
+
 }
