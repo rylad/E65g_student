@@ -10,7 +10,7 @@ import UIKit
 
 class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSource {
     
-    var saveClosure: ((String)-> Void)?
+    var saveClosure: ((String, [[Int]])-> Void)?
     var gridName: String?
     var gridContents: [[Int]]?
     var delegate: EngineDelegate?
@@ -23,7 +23,7 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden=false
-        
+
         if let gridName = gridName{
             gridNameTextField.text = gridName
         }
@@ -37,10 +37,11 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
         var count = 0
         while count < (gridContents?.count)! {
             var coordinate = gridContents![count]
-            var row = Int(coordinate[0])
-            var col = Int(coordinate[1])
+            let row = Int(coordinate[0])
+            let col = Int(coordinate[1])
             engine.grid[row, col] = .alive
             count+=1
+            engineDidUpdate(withGrid: engine.grid)
         }
 
     }
@@ -62,12 +63,19 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func save(_ sender: UIButton) {
-        if let newValue = gridNameTextField.text,
-            let saveClosure = saveClosure {
-            saveClosure(newValue)
-            self.navigationController?.popViewController(animated: true)
-        }
+
+    @IBAction func save(_ sender: UIBarButtonItem) {
+        let gName = gridNameTextField.text
+        let gContents = engine.saving(withGrid: engine.grid)
+        let alive = gContents["alive"]
+        standardEngine.mapNew()
+        
+//        let saveClosure = saveClosure {
+//            saveClosure(gName, alive)
+//            self.navigationController?.popViewController(animated: true)
+//        }
+        
+    
     }
 }
 

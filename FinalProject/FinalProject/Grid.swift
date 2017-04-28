@@ -212,12 +212,13 @@ protocol EngineProtocol {
     
     func step() -> GridProtocol
     func reset() -> GridProtocol
+    func saving(withGrid: GridProtocol) -> [String: [[Int]]]
 }
 
 
 
 class standardEngine: EngineProtocol {
-    public static var engine: standardEngine = standardEngine(rows: 10, cols: 10, refreshRate: 0.0	)
+    public static var engine: standardEngine = standardEngine(rows: 10, cols: 10, refreshRate: 10.0	)
     var grid: GridProtocol
     var refreshTimer: Timer?
     var refreshRate: Double = 0.0{
@@ -243,7 +244,10 @@ class standardEngine: EngineProtocol {
     var onOff = false
     var rows: Int
     var cols: Int
-
+    var aliveState = [[Int]]()
+    var bornState = [[Int]]()
+    var diedState = [[Int]]()
+    var saveDict = [String: [[Int]]]()
     
 
     var delegate: EngineDelegate?
@@ -310,5 +314,33 @@ class standardEngine: EngineProtocol {
         return grid
     }
     
+    func saving(withGrid: GridProtocol) -> [String:[[Int]]]{
+        (0 ..< withGrid.size.rows).forEach { i in
+            (0 ..< withGrid.size.cols).forEach { j in
+                switch withGrid[j,i].description()
+                {
+                case "alive":
+                    aliveState.append([j,i])
+                case "born":
+                    bornState.append([j,i])
+                case "died":
+                    diedState.append([j,i])
+                default:
+                    ()
+                }
+            }
+        }
+        print(aliveState)
+        print(bornState)
+        print(diedState)
+        saveDict = ["alive": aliveState, "born": bornState, "died": diedState ]
+        NotificationCenter.default.post(
+            name: NSNotification.Name(rawValue: "refresh"),
+            object:nil,
+            userInfo: saveDict);
+        return saveDict
+    }
 
+    
 }
+

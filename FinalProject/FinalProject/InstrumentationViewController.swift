@@ -31,7 +31,6 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.isNavigationBarHidden=true
         engine = standardEngine.mapNew()
         rowStep.value = Double(engine.rows)
         self.rows.text = "\(engine.rows)"
@@ -51,12 +50,12 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
                 return
             }
             
-            let jsonArray = json as! NSArray
+            var jsonArray = json as! NSArray
             self.jsonContent = jsonArray
             var count = 0
             while count < jsonArray.count {
-                let jsonDictionary = jsonArray[count] as! NSDictionary
-                let jsonTitle = jsonDictionary["title"] as! String
+                var jsonDictionary = jsonArray[count] as! NSDictionary
+                var jsonTitle = jsonDictionary["title"] as! String
                 self.gridNames.append(jsonTitle)
                 count+=1
                 OperationQueue.main.addOperation {
@@ -185,8 +184,8 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         if let indexPath = indexPath{
             let gridEditorController = segue.destination as! GridEditorViewController
             
-            let jsonDictionary = jsonContent[indexPath.item] as! NSDictionary
-            let jsonTitle = jsonDictionary["title"] as! String
+            var jsonDictionary = jsonContent[indexPath.item] as! NSDictionary
+            var jsonTitle = jsonDictionary["title"] as! String
             let jsonContents = jsonDictionary["contents"] as! [[Int]]
             let data: gridInfo = gridInfo(gName: jsonTitle, gContents: jsonContents)
             gridEditorController.gridName = data.gName
@@ -194,9 +193,19 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
             let maxSize = data.findMax(gContents: data.gContents)
             standardEngine.mapNew().updateCols(col: (maxSize)*2)
             standardEngine.mapNew().updateRows(row: (maxSize)*2)
+            
+            gridEditorController.saveClosure = {gName, alive in
+//                jsonDictionary = self.jsonContent[indexPath.item] as! NSDictionary
+//                jsonDictionary["contents"] = alive
+//                jsonTitle = newValue
+                self.tableView.reloadData()
+            }
         
             
             
         }
+//        let backButton = UIBarButtonItem()
+//        backButton.title="Cancel"
+//        navigationItem.backBarButtonItem = backButton
     }
 }

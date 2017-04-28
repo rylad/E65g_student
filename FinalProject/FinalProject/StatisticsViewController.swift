@@ -24,7 +24,7 @@ class StatisticsViewController: UIViewController {
         var countBorn = 0
         var countLiving = 0
         var countDied = 0
-        var countEmpty = 0
+        var countEmpty = 0        
         
         (0 ..< withGrid.size.rows).forEach { i in
             (0 ..< withGrid.size.cols).forEach { j in

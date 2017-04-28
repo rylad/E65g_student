@@ -12,10 +12,32 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var saveDict = [String: [[Int]]]()
+
+    func findDict(_ notification: NSNotification) -> [String: [[Int]]] {
+        if let saveDict = notification.userInfo?["saveDict"] as? [String: [[Int]]]{
+            return saveDict
+        }
+        return saveDict
+    }
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(self.findDict(_:)),
+            name: NSNotification.Name(rawValue: "refresh"),
+            object: nil
+        )
+        
+        
+
+        let strings = saveDict
+        
+        
+        let defaults = UserDefaults.standard
+        defaults.set(strings, forKey: "strings")
+        let recoveredStrings = defaults.object(forKey: "strings")
         return true
     }
 
