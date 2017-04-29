@@ -3,7 +3,7 @@
 //
 import Foundation
 
-let finalProjectURL = "https://dl.dropboxusercontent.com/u/7544475/S65g.json"
+
 
 fileprivate func norm(_ val: Int, to size: Int) -> Int { return ((val % size) + size) % size }
 
@@ -134,57 +134,132 @@ public extension Grid {
     }
 }
 
-protocol GridInfo{
-    var gName: String { get set }
-    var gContents: [[Int]] { get set }
-
-    func findMax(gContents : [[Int]]) -> Int
-
+protocol jsonProtocol {
+    var json: Any { get }
+    var jsonArray: NSMutableArray { get set }
+    var gridNames: [String] { get set }
+    var jsonDictionary: NSMutableDictionary { get set }
+    var jsonTitle: String { get set }
+    var jsonContents:[[Int]] { get set }
+    
+    func parse()
+    func setDictionary(index: Int) -> NSMutableDictionary
+    func getContents(index: Int)->[[Int]]
+    func getTitle(index: Int)->String
+    func findMax(contents : [[Int]]) -> Int
 }
 
-class gridInfo: GridInfo{
-    var gName: String
-    var gContents: [[Int]]
+class jsonData : jsonProtocol{
+    public static var startJson : jsonData = jsonData()
+    let finalProjectURL = "https://dl.dropboxusercontent.com/u/7544475/S65g.json"
+    var json: Any = []
+    var jsonArray: NSMutableArray = []
+    var gridNames: [String] = []
+    var jsonDictionary: NSMutableDictionary = [:]
+    var jsonTitle: String = ""
+    var jsonContents: [[Int]]=[[]]
+    var contents : [[Int]] = [[]]
+    var index : Int = 0
+    var max : Int = 0
     
-    init(gName: String, gContents: [[Int]]){
-        self.gName = gName
-        self.gContents = gContents
+    init(){
+        parse()
     }
     
-    func findMax(gContents:[[Int]]) -> Int {
-        let max = self.gContents.flatMap{return $0}.max()
-        return max!
+    func parse() {
+        let fetcher = Fetcher()
+        fetcher.fetchJSON(url: URL(string:finalProjectURL)!) { (json: Any?, message: String?) in
+            self.jsonArray = json as! NSMutableArray
+            var count = 0
+            while count < self.jsonArray.count {
+                var jsonDictionary = self.jsonArray[count] as! NSDictionary
+                var jsonTitle = jsonDictionary["title"] as! String
+                self.gridNames.append(jsonTitle)
+                count+=1
+            }
+            var gridNames = self.gridNames
+        }
+
+
+    }
+    
+    func setDictionary(index: Int) -> NSMutableDictionary{
+        self.jsonDictionary = jsonArray[index] as! NSMutableDictionary
+        return jsonDictionary
+    }
+    
+    func getContents(index: Int)->[[Int]]{
+        print(setDictionary(index: index)["title"])
+        self.jsonContents =  setDictionary(index: index)["contents"] as! [[Int]]
+        return jsonContents
+    }
+    
+    func getTitle(index: Int)-> String{
+        print(setDictionary(index: index)["contents"])
+        self.jsonTitle =  setDictionary(index: index)["title"] as! String
+        return jsonTitle
+    }
+    
+    
+    func findMax(contents:[[Int]]) -> Int {
+        self.max = contents.flatMap{return $0}.max()!
+        return max
     }
 }
 
-protocol FetchProtocol{
-    var gName: String? { get set }
-    var gContents: [[Int]]? { get set }
-    var gridTypes: [String] { get set }
-    var url: String { get set }
-
-    func findMax(gContents : [[Int]]) -> Int
-}
 
 
+//protocol GridInfo{
+//    var gName: String { get set }
+//    var gContents: [[Int]] { get set }
+//
+//    func findMax(gContents : [[Int]]) -> Int
+//
+//}
+//
+//class gridInfo: GridInfo{
+//    var gName: String
+//    var gContents: [[Int]]
+//    
+//    init(gName: String, gContents: [[Int]]){
+//        self.gName = gName
+//        self.gContents = gContents
+//    }
+//    
+//    func findMax(gContents:[[Int]]) -> Int {
+//        let max = self.gContents.flatMap{return $0}.max()
+//        return max!
+//    }
+//}
 
-class standardFetcher: FetchProtocol {
-    var gName: String?
-    var gContents: [[Int]]?
-    var json: NSArray?
-    var jsonContent: NSArray?
-    //var gridTypes: [String]
-    var gridContents : [[Int]]?
-    var url : String = finalProjectURL
-    
-    var gridTypes = [String]()
-    
-    
-    func findMax(gContents:[[Int]]) -> Int {
-        let max = gContents.flatMap{return $0}.max()
-        return max!
-    }
-}
+//protocol FetchProtocol{
+//    var gName: String? { get set }
+//    var gContents: [[Int]]? { get set }
+//    var gridTypes: [String] { get set }
+//    var url: String { get set }
+//
+//    func findMax(gContents : [[Int]]) -> Int
+//}
+//
+//
+//
+//class standardFetcher: FetchProtocol {
+//    var gName: String?
+//    var gContents: [[Int]]?
+//    var json: NSArray?
+//    var jsonContent: NSArray?
+//    //var gridTypes: [String]
+//    var gridContents : [[Int]]?
+//    var url : String = finalProjectURL
+//    
+//    var gridTypes = [String]()
+//    
+//    
+//    func findMax(gContents:[[Int]]) -> Int {
+//        let max = gContents.flatMap{return $0}.max()
+//        return max!
+//    }
+//}
 
 
 

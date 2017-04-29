@@ -25,9 +25,9 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     public var jsonArray: NSMutableArray = []
     var gridNames = [String]()
     var engine: EngineProtocol!
-    var fetch: FetchProtocol!
-    var info : GridInfo!
+    var json: jsonProtocol!
     
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,31 +37,39 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         colStep.value = Double(engine.rows)
         self.cols.text = "\(engine.rows)"
         toggleOn.setOn(false, animated: false)
+
+        json = jsonData()
+        sleep(4)
+        gridNames = json.gridNames
+        print (json.gridNames)
+
+//        print(json.gridNames)
+
         
         
-        let fetcher = Fetcher()
-        fetcher.fetchJSON(url: URL(string:finalProjectURL)!) { (json: Any?, message: String?) in
-            guard message == nil else {
-                print(message ?? "nil")
-                return
-            }
-            guard let json = json else {
-                print("no json")
-                return
-            }
-            var jsonArray = json as! NSMutableArray
-            var count = 0
-            while count < jsonArray.count {
-                var jsonDictionary = jsonArray[count] as! NSDictionary
-                var jsonTitle = jsonDictionary["title"] as! String
-                self.gridNames.append(jsonTitle)
-                count+=1
-                OperationQueue.main.addOperation {
-                    self.tableView.reloadData()
-                }
-            }
-        }
-//        
+//        let fetcher = Fetcher()
+//        fetcher.fetchJSON(url: URL(string:finalProjectURL)!) { (json: Any?, message: String?) in
+//            guard message == nil else {
+//                print(message ?? "nil")
+//                return
+//            }
+//            guard let json = json else {
+//                print("no json")
+//                return
+//            }
+//            var jsonArray = json as! NSMutableArray
+//            var count = 0
+//            while count < jsonArray.count {
+//                var jsonDictionary = jsonArray[count] as! NSDictionary
+//                var jsonTitle = jsonDictionary["title"] as! String
+//                self.gridNames.append(jsonTitle)
+//                count+=1
+//                OperationQueue.main.addOperation {
+//                    self.tableView.reloadData()
+//                }
+//            }
+//        }
+//
 //            OperationQueue.main.addOperation {
 //                self.tableView.reloadData()
 //            }
@@ -182,33 +190,25 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         let indexPath = tableView.indexPathForSelectedRow
         if let indexPath = indexPath{
             let gridEditorController = segue.destination as! GridEditorViewController
-            
-            
-            var jsonDictionary = self.jsonArray[indexPath.item] as! NSMutableDictionary
-            var jsonTitle = jsonDictionary["title"] as! String
-            var jsonContents = jsonDictionary["contents"] as! [[Int]]
-            let data: gridInfo = gridInfo(gName: jsonTitle, gContents: jsonContents)
-            gridEditorController.gridName = data.gName
-            gridEditorController.gridContents = data.gContents
-            let maxSize = data.findMax(gContents: data.gContents)
+
+            gridEditorController.gridName = json.gridNames[indexPath.item]
+            gridEditorController.gridContents = json.getContents(index: indexPath.item)
+            let maxSize = json.findMax(contents: json.getContents(index: indexPath.item))
             standardEngine.mapNew().updateCols(col: (maxSize)*2)
             standardEngine.mapNew().updateRows(row: (maxSize)*2)
             
             gridEditorController.saveClosure = {gName, alive in
-                jsonDictionary = ["title":gName,"contents":alive]
-                self.jsonArray[indexPath.item] = jsonDictionary
-                
-//                jsonContent[indexPath.item] = jsonDictionary
-//                jsonContents = alive
-//                jsonTitle = gName
-                self.tableView.reloadData()
+
+                self.json.jsonArray.replaceObject(at: indexPath.item, with: ["title" : gName, "contents":alive])
+                self.gridNames[indexPath.item] = gName
+            
+                OperationQueue.main.addOperation {
+                    self.tableView.reloadData()
+                }
             }
         
             
             
         }
-//        let backButton = UIBarButtonItem()
-//        backButton.title="Cancel"
-//        navigationItem.backBarButtonItem = backButton
     }
 }

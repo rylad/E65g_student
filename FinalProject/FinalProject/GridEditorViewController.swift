@@ -16,6 +16,7 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
     var delegate: EngineDelegate?
     var engine: EngineProtocol!
     var coordinate = [Int]()
+    var json: jsonProtocol!
     
     @IBOutlet weak var gridView: XView!
     @IBOutlet weak var gridNameTextField: UITextField!
@@ -33,6 +34,8 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
         gridView.drawGrid = self
         self.gridView.gridRows = engine.rows
         self.gridView.gridCols = engine.cols
+        
+        json=jsonData()
     
         var count = 0
         while count < (gridContents?.count)! {
