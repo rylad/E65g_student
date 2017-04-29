@@ -21,9 +21,9 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     @IBOutlet weak var tableView: UITableView!
     
     let finalProjectURL = "https://dl.dropboxusercontent.com/u/7544475/S65g.json"
-   
+    
+    public var jsonArray: NSMutableArray = []
     var gridNames = [String]()
-    var jsonContent = NSArray()
     var engine: EngineProtocol!
     var fetch: FetchProtocol!
     var info : GridInfo!
@@ -49,9 +49,7 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
                 print("no json")
                 return
             }
-            
-            var jsonArray = json as! NSArray
-            self.jsonContent = jsonArray
+            var jsonArray = json as! NSMutableArray
             var count = 0
             while count < jsonArray.count {
                 var jsonDictionary = jsonArray[count] as! NSDictionary
@@ -144,6 +142,7 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         let identifier = indexPath.item % 2 == 0 ? "basic" : "gray"
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         let label = cell.contentView.subviews.first as! UILabel
+
         
 //        OperationQueue.main.addOperation(
         label.text = gridNames[indexPath.item]
@@ -184,9 +183,10 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         if let indexPath = indexPath{
             let gridEditorController = segue.destination as! GridEditorViewController
             
-            var jsonDictionary = jsonContent[indexPath.item] as! NSDictionary
+            
+            var jsonDictionary = self.jsonArray[indexPath.item] as! NSMutableDictionary
             var jsonTitle = jsonDictionary["title"] as! String
-            let jsonContents = jsonDictionary["contents"] as! [[Int]]
+            var jsonContents = jsonDictionary["contents"] as! [[Int]]
             let data: gridInfo = gridInfo(gName: jsonTitle, gContents: jsonContents)
             gridEditorController.gridName = data.gName
             gridEditorController.gridContents = data.gContents
@@ -195,9 +195,12 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
             standardEngine.mapNew().updateRows(row: (maxSize)*2)
             
             gridEditorController.saveClosure = {gName, alive in
-//                jsonDictionary = self.jsonContent[indexPath.item] as! NSDictionary
-//                jsonDictionary["contents"] = alive
-//                jsonTitle = newValue
+                jsonDictionary = ["title":gName,"contents":alive]
+                self.jsonArray[indexPath.item] = jsonDictionary
+                
+//                jsonContent[indexPath.item] = jsonDictionary
+//                jsonContents = alive
+//                jsonTitle = gName
                 self.tableView.reloadData()
             }
         

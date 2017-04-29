@@ -65,15 +65,14 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
     
 
     @IBAction func save(_ sender: UIBarButtonItem) {
-        let gName = gridNameTextField.text
         let gContents = engine.saving(withGrid: engine.grid)
         let alive = gContents["alive"]
-        standardEngine.mapNew()
-        
-//        let saveClosure = saveClosure {
-//            saveClosure(gName, alive)
-//            self.navigationController?.popViewController(animated: true)
-//        }
+   if let gName = gridNameTextField.text,
+
+        let saveClosure = saveClosure {
+        saveClosure(gName, alive!)
+        self.navigationController?.popViewController(animated: true)
+       }
         
     
     }

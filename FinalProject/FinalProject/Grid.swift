@@ -134,14 +134,6 @@ public extension Grid {
     }
 }
 
-//public extension Grid {
-//    public static func importedInitializer(pos: GridPosition) -> CellState {
-//        switch pos {
-//            
-//        }
-//    }
-//}
-
 protocol GridInfo{
     var gName: String { get set }
     var gContents: [[Int]] { get set }
@@ -153,7 +145,7 @@ protocol GridInfo{
 class gridInfo: GridInfo{
     var gName: String
     var gContents: [[Int]]
-
+    
     init(gName: String, gContents: [[Int]]){
         self.gName = gName
         self.gContents = gContents
@@ -208,6 +200,7 @@ protocol EngineProtocol {
     var cols: Int { get set }
     var grid: GridProtocol { get set }
     var delegate: EngineDelegate? { get set }
+    var aliveState : [[Int]] { get set }
 
     
     func step() -> GridProtocol

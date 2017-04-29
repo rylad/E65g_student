@@ -46,7 +46,7 @@ class Fetcher: NSObject, URLSessionDelegate {
                 return completion(nil, message)
                 
             case .success(let data):
-                guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) else {
+                guard let json = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) else {
                     return completion(nil, "Could not parse JSON")
                 }
                 completion(json, nil)
