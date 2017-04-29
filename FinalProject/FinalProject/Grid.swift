@@ -147,6 +147,7 @@ protocol jsonProtocol {
     func getContents(index: Int)->[[Int]]
     func getTitle(index: Int)->String
     func findMax(contents : [[Int]]) -> Int
+    func addNew(title: String, contents:[[Int]]) -> NSMutableArray
 }
 
 class jsonData : jsonProtocol{
@@ -163,20 +164,21 @@ class jsonData : jsonProtocol{
     var max : Int = 0
     
     init(){
-        parse()
     }
     
     func parse() {
         let fetcher = Fetcher()
         fetcher.fetchJSON(url: URL(string:finalProjectURL)!) { (json: Any?, message: String?) in
             self.jsonArray = json as! NSMutableArray
+            var jsonArray = self.jsonArray
             var count = 0
             while count < self.jsonArray.count {
-                var jsonDictionary = self.jsonArray[count] as! NSDictionary
-                var jsonTitle = jsonDictionary["title"] as! String
+                let jsonDictionary = self.jsonArray[count] as! NSDictionary
+                let jsonTitle = jsonDictionary["title"] as! String
                 self.gridNames.append(jsonTitle)
                 count+=1
             }
+            
             var gridNames = self.gridNames
         }
 
@@ -204,6 +206,14 @@ class jsonData : jsonProtocol{
     func findMax(contents:[[Int]]) -> Int {
         self.max = contents.flatMap{return $0}.max()!
         return max
+    }
+    
+    func addNew(title: String, contents:[[Int]]) -> NSMutableArray {
+        self.jsonArray.add(["title": title, "contents":contents])
+        self.gridNames.append(title)
+        
+        print (self.gridNames)
+        print (self.jsonArray)
     }
 }
 

@@ -39,46 +39,21 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         toggleOn.setOn(false, animated: false)
 
         json = jsonData()
+        json.parse()
+        //Allowing time for fetcher
         sleep(4)
+        
         gridNames = json.gridNames
         print (json.gridNames)
 
-//        print(json.gridNames)
-
-        
-        
-//        let fetcher = Fetcher()
-//        fetcher.fetchJSON(url: URL(string:finalProjectURL)!) { (json: Any?, message: String?) in
-//            guard message == nil else {
-//                print(message ?? "nil")
-//                return
-//            }
-//            guard let json = json else {
-//                print("no json")
-//                return
-//            }
-//            var jsonArray = json as! NSMutableArray
-//            var count = 0
-//            while count < jsonArray.count {
-//                var jsonDictionary = jsonArray[count] as! NSDictionary
-//                var jsonTitle = jsonDictionary["title"] as! String
-//                self.gridNames.append(jsonTitle)
-//                count+=1
-//                OperationQueue.main.addOperation {
-//                    self.tableView.reloadData()
-//                }
-//            }
-//        }
-//
-//            OperationQueue.main.addOperation {
-//                self.tableView.reloadData()
-//            }
         
         }
 
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden=true
-    
+        OperationQueue.main.addOperation {
+            self.tableView.reloadData()
+        }
 
     }
     override func didReceiveMemoryWarning() {
@@ -150,20 +125,17 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         let identifier = indexPath.item % 2 == 0 ? "basic" : "gray"
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         let label = cell.contentView.subviews.first as! UILabel
-
-        
-//        OperationQueue.main.addOperation(
         label.text = gridNames[indexPath.item]
-//        )
         return cell
     }
 
-    //MARK: Comeback and update this
+    
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 //        if editingStyle == .delete {
-//            var newData = data[indexPath.section]
-//            newData.remove(at: indexPath.row)
-//            data[indexPath.section] = newData
+//            var newData = gridNames[indexPath.item]
+//            var row = indexPath.item
+//            newData.remove(at: row)
+//            gridNames[indexPath.section] = newData
 //            tableView.deleteRows(at: [indexPath], with: .automatic)
 //            tableView.reloadData()
 //        }
@@ -199,9 +171,9 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
             
             gridEditorController.saveClosure = {gName, alive in
 
-                self.json.jsonArray.replaceObject(at: indexPath.item, with: ["title" : gName, "contents":alive])
+                self.json.jsonArray.replaceObject(at: indexPath.item, with: ["title" : gName, "contents":alive]) as! NSMutableDictionary
                 self.gridNames[indexPath.item] = gName
-            
+                
                 OperationQueue.main.addOperation {
                     self.tableView.reloadData()
                 }

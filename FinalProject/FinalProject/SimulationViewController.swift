@@ -16,6 +16,7 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
     var delegate: EngineDelegate?
     var engine: EngineProtocol!
     var timer: Timer?
+    var json: jsonProtocol!
     
 //    var aliveState = [[Int]]()
 //    var bornState = [[Int]]()
@@ -57,6 +58,8 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
         self.gridView.gridCols = engine.cols
         self.gridView.setNeedsDisplay()
         
+        json = jsonData()
+        
         
     }
     
@@ -97,10 +100,13 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
         }
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let textField = alert?.textFields![0]
+            self.json.addNew(title: (textField?.text!)!, contents: self.engine.aliveState)
             print("--------------------------------")
             print (textField?.text, self.engine.aliveState)
         }))
         self.present(alert, animated: true, completion: nil)
+        
+        
         
 
     }
