@@ -40,11 +40,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="30" sectionHeaderHeight="1" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gKK-Zk-IWY">
-                                <rect key="frame" x="0.0" y="214" width="375" height="404"/>
+                                <rect key="frame" x="0.0" y="305" width="375" height="313"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="375" id="QZ7-ua-BUy"/>
-                                    <constraint firstAttribute="height" constant="404" id="xPJ-Uz-R4l"/>
+                                    <constraint firstAttribute="height" constant="313" id="xPJ-Uz-R4l"/>
                                 </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="basic" textLabel="eTJ-nK-v4x" style="IBUITableViewCellStyleDefault" id="yc8-pT-ycu">
@@ -202,9 +202,24 @@
                                     <action selector="toggleOn:" destination="9pv-A4-QxB" eventType="valueChanged" id="NMh-ES-Jep"/>
                                 </connections>
                             </switch>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XIJ-LW-qyB" userLabel="Add Grid">
+                                <rect key="frame" x="16" y="204" width="150" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="87h-jc-M2w"/>
+                                    <constraint firstAttribute="height" constant="30" id="cjj-zf-0SL"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Add Grid">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="addGrid:" destination="9pv-A4-QxB" eventType="touchUpInside" id="let-rp-nsJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="gKK-Zk-IWY" firstAttribute="top" secondItem="XIJ-LW-qyB" secondAttribute="bottom" constant="71" id="1vU-N6-Eza"/>
                             <constraint firstItem="JMa-gB-Hp3" firstAttribute="top" secondItem="Oy7-5L-ghb" secondAttribute="bottom" constant="16" id="2IM-MU-Qod"/>
                             <constraint firstItem="P0j-Rk-TPc" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" id="2kM-fR-9Qh"/>
                             <constraint firstItem="Wu3-Dp-4Fo" firstAttribute="leading" secondItem="l4P-DZ-5Ru" secondAttribute="trailing" constant="8" id="3za-d5-Z9A"/>
@@ -215,7 +230,6 @@
                             <constraint firstItem="l4P-DZ-5Ru" firstAttribute="top" secondItem="JMa-gB-Hp3" secondAttribute="bottom" constant="16" id="Avg-DN-KeT"/>
                             <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="gKK-Zk-IWY" secondAttribute="bottom" id="CAF-aj-reU"/>
                             <constraint firstItem="km5-Mr-iRA" firstAttribute="leading" secondItem="JMa-gB-Hp3" secondAttribute="trailing" constant="1" id="Gje-cG-AZU"/>
-                            <constraint firstItem="gKK-Zk-IWY" firstAttribute="top" secondItem="hlO-Br-PLR" secondAttribute="bottom" constant="3" id="HB2-dj-Ehz"/>
                             <constraint firstItem="hlO-Br-PLR" firstAttribute="leading" secondItem="P0j-Rk-TPc" secondAttribute="trailing" constant="144" id="Jld-3O-T6o"/>
                             <constraint firstItem="gKK-Zk-IWY" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leading" id="KTT-R1-r7x"/>
                             <constraint firstItem="P0j-Rk-TPc" firstAttribute="leading" secondItem="Oy7-5L-ghb" secondAttribute="leading" id="LgZ-mf-7tU"/>
@@ -229,12 +243,15 @@
                             <constraint firstItem="Wu3-Dp-4Fo" firstAttribute="top" secondItem="km5-Mr-iRA" secondAttribute="bottom" constant="6" id="ZMR-rT-PFN"/>
                             <constraint firstItem="zNB-T7-GKK" firstAttribute="leading" secondItem="km5-Mr-iRA" secondAttribute="trailing" constant="8" id="Zye-Dz-zZQ"/>
                             <constraint firstItem="JMa-gB-Hp3" firstAttribute="leading" secondItem="Oy7-5L-ghb" secondAttribute="leading" id="aZr-RN-9aY"/>
+                            <constraint firstItem="XIJ-LW-qyB" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" id="d1q-c0-wht"/>
                             <constraint firstItem="l4P-DZ-5Ru" firstAttribute="leading" secondItem="Oy7-5L-ghb" secondAttribute="leading" id="dC3-BL-L6P"/>
                             <constraint firstItem="db2-eL-D7A" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="3" id="ejk-1y-Xzc"/>
                             <constraint firstItem="zNB-T7-GKK" firstAttribute="trailing" secondItem="Wu3-Dp-4Fo" secondAttribute="trailing" id="enC-zo-syi"/>
                             <constraint firstItem="0pG-sE-ASS" firstAttribute="leading" secondItem="Oy7-5L-ghb" secondAttribute="trailing" constant="1" id="ezs-La-JeQ"/>
                             <constraint firstItem="Wu3-Dp-4Fo" firstAttribute="top" secondItem="zNB-T7-GKK" secondAttribute="bottom" constant="8" id="gHe-hc-Ju3"/>
                             <constraint firstItem="db2-eL-D7A" firstAttribute="leading" secondItem="0pG-sE-ASS" secondAttribute="trailing" constant="8" id="gko-E8-VfE"/>
+                            <constraint firstItem="XIJ-LW-qyB" firstAttribute="top" secondItem="P0j-Rk-TPc" secondAttribute="bottom" constant="8" id="ipW-3m-eaO"/>
+                            <constraint firstItem="hlO-Br-PLR" firstAttribute="leading" secondItem="XIJ-LW-qyB" secondAttribute="trailing" constant="144" id="kTf-Ew-wqv"/>
                             <constraint firstItem="Oy7-5L-ghb" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" id="mWR-8e-CMk"/>
                             <constraint firstItem="0pG-sE-ASS" firstAttribute="leading" secondItem="Oy7-5L-ghb" secondAttribute="trailing" constant="1" id="maO-D5-NV1"/>
                             <constraint firstItem="hlO-Br-PLR" firstAttribute="top" secondItem="Wu3-Dp-4Fo" secondAttribute="bottom" constant="8" id="mdl-pK-zzE"/>

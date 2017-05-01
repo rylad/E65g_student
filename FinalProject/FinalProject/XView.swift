@@ -25,11 +25,7 @@ public protocol GridViewDataSource {
     @IBInspectable var gridWidth: CGFloat = CGFloat(0.5)
     
     var drawGrid: GridViewDataSource?
-//    
-//    var xColor = UIColor.black
-//    var xProportion = CGFloat(1.0)
-//    var widthProportion = CGFloat(0.05)
-    
+
     override func draw(_ rect: CGRect) {
         let drawSize = CGSize(
             width: rect.size.width / CGFloat(gridCols),
@@ -123,7 +119,7 @@ public protocol GridViewDataSource {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         lastTouchedPosition = nil
-        let engine = standardEngine.mapNew()
+        let engine = StandardEngine.mapNew()
         engine.engineUpdateNC()
     }
     

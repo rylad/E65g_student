@@ -16,7 +16,7 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
     var delegate: EngineDelegate?
     var engine: EngineProtocol!
     var coordinate = [Int]()
-    var json: jsonProtocol!
+    var json: JsonProtocol!
     
     @IBOutlet weak var gridView: XView!
     @IBOutlet weak var gridNameTextField: UITextField!
@@ -29,13 +29,13 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
             gridNameTextField.text = gridName
         }
         
-        engine = standardEngine.mapNew()
+        engine = StandardEngine.mapNew()
         engine.delegate = self
         gridView.drawGrid = self
         self.gridView.gridRows = engine.rows
         self.gridView.gridCols = engine.cols
         
-        json=jsonData()
+        //json=jsonData()
     
         var count = 0
         while count < (gridContents?.count)! {
@@ -49,8 +49,8 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
 
     }
     func engineDidUpdate(withGrid: GridProtocol) {
-        self.gridView.gridRows = standardEngine.mapNew().rows
-        self.gridView.gridCols = standardEngine.mapNew().cols
+        self.gridView.gridRows = StandardEngine.mapNew().rows
+        self.gridView.gridCols = StandardEngine.mapNew().cols
         self.gridView.setNeedsDisplay()
     }
 
@@ -70,12 +70,12 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
     @IBAction func save(_ sender: UIBarButtonItem) {
         let gContents = engine.saving(withGrid: engine.grid)
         let alive = gContents["alive"]
-   if let gName = gridNameTextField.text,
+        if let gName = gridNameTextField.text,
 
         let saveClosure = saveClosure {
-        saveClosure(gName, alive!)
-        self.navigationController?.popViewController(animated: true)
-       }
+            saveClosure(gName, alive!)
+            self.navigationController?.popViewController(animated: true)
+        }
         
     
     }

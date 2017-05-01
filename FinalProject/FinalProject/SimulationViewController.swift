@@ -16,56 +16,39 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
     var delegate: EngineDelegate?
     var engine: EngineProtocol!
     var timer: Timer?
-    var json: jsonProtocol!
+    var json: JsonProtocol!
     
-//    var aliveState = [[Int]]()
-//    var bornState = [[Int]]()
-//    var diedState = [[Int]]()
-//    var saveDict = [String: [[Int]]]()
-//    
-//    func saving(withGrid: GridProtocol){
-//        (0 ..< withGrid.size.rows).forEach { i in
-//            (0 ..< withGrid.size.cols).forEach { j in
-//                switch withGrid[j,i].description()
-//                {
-//                case "alive":
-//                    aliveState.append([j,i])
-//                case "born":
-//                    bornState.append([j,i])
-//                case "died":
-//                    diedState.append([j,i])
-//                default:
-//                    ()
-//                }
-//            }
-//        }
-//        print(aliveState)
-//        print(bornState)
-//        print(diedState)
-//        saveDict = ["alive": aliveState, "born": bornState, "died": diedState ]
-//        NotificationCenter.default.post(
-//            name: NSNotification.Name(rawValue: "refresh"),
-//            object:nil,
-//            userInfo: saveDict);
-//    }
-//    
     override func viewDidLoad() {
         super.viewDidLoad()
-        engine = standardEngine.mapNew()
+        engine = StandardEngine.mapNew()
         engine.delegate = self
         gridView.drawGrid = self
         self.gridView.gridRows = engine.rows
         self.gridView.gridCols = engine.cols
         self.gridView.setNeedsDisplay()
         
-        json = jsonData()
-        
+        //json = jsonData()
+        //self.json.jsonArray = json.jsonArray
+        //self.json.gridNames = json.gridNames
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        engine = StandardEngine.mapNew()
+        engine.delegate = self
+        gridView.drawGrid = self
+        self.gridView.gridRows = engine.rows
+        self.gridView.gridCols = engine.cols
+        self.gridView.setNeedsDisplay()
+        
+        //json = jsonData()
+        //self.json.jsonArray = json.jsonArray
+        //self.json.gridNames = json.gridNames
+    }
+    
     func engineDidUpdate(withGrid: GridProtocol) {
-        self.gridView.gridRows = standardEngine.mapNew().rows
-        self.gridView.gridCols = standardEngine.mapNew().cols
+        self.gridView.gridRows = StandardEngine.mapNew().rows
+        self.gridView.gridCols = StandardEngine.mapNew().cols
         self.gridView.setNeedsDisplay()
     }
     
@@ -92,17 +75,13 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
     }
     
     @IBAction func save(_ sender: UIButton) {
-        engine.saving(withGrid: engine.grid)
-        
         let alert = UIAlertController(title: "Saving", message: "Grid Name?", preferredStyle: .alert)
         alert.addTextField { (textField) in
             textField.text = ""
         }
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let textField = alert?.textFields![0]
-            self.json.addNew(title: (textField?.text!)!, contents: self.engine.aliveState)
-            print("--------------------------------")
-            print (textField?.text, self.engine.aliveState)
+            self.json.addNew(title: (textField?.text)!, contents: self.engine.aliveState)
         }))
         self.present(alert, animated: true, completion: nil)
         

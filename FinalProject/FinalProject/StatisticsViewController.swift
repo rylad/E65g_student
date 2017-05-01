@@ -47,12 +47,12 @@ class StatisticsViewController: UIViewController {
         empty.text = String(countEmpty)
     }
     
-    var engine:standardEngine!
+    var engine:StandardEngine!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        engine = standardEngine.mapNew()
+        engine = StandardEngine.mapNew()
         count(withGrid: engine.grid)
         let nc = NotificationCenter.default
         let name = Notification.Name(rawValue: "EngineUpdate")
