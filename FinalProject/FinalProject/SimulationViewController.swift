@@ -27,6 +27,10 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
         self.gridView.gridCols = engine.cols
         self.gridView.setNeedsDisplay()
         
+        json = JsonData.mapNew()
+        json.gridNames = json.updateNames()
+        
+        
         //json = jsonData()
         //self.json.jsonArray = json.jsonArray
         //self.json.gridNames = json.gridNames
@@ -40,6 +44,9 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
         self.gridView.gridRows = engine.rows
         self.gridView.gridCols = engine.cols
         self.gridView.setNeedsDisplay()
+        
+        json = JsonData.mapNew()
+        json.gridNames = json.updateNames()
         
         //json = jsonData()
         //self.json.jsonArray = json.jsonArray
