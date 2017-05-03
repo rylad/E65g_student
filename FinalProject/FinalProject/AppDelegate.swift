@@ -12,33 +12,54 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var saveDict = [String: [[Int]]]()
 
-    func findDict(_ notification: NSNotification) -> [String: [[Int]]] {
-        if let saveDict = notification.userInfo?["saveDict"] as? [String: [[Int]]]{
-            return saveDict
-        }
-        return saveDict
-    }
+
+//    func findDict(_ notification: NSNotification) -> [String: [[Int]]] {
+//        if let saveDict = notification.userInfo?["saveDict"] as? [String: [[Int]]]{
+//            return saveDict
+//        }
+//        return saveDict
+//    }
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(self.findDict(_:)),
-            name: NSNotification.Name(rawValue: "refresh"),
-            object: nil
-        )
-        
+        var strings = [String: [[Int]]]()
+        let nc = NotificationCenter.default
+        let name = Notification.Name(rawValue: "saving")
+        nc.addObserver(
+            forName: name,
+            object: nil,
+            queue: nil) {(n) in
+                let nd = n.userInfo?["dict"]
+                strings =  nd as! [String:[[Int]]]
+                
+
+        }
         
 
-        let strings = saveDict
         
         
-        let defaults = UserDefaults.standard
-        defaults.set(strings, forKey: "strings")
-        let recoveredStrings = defaults.object(forKey: "strings")
-        return true
+        let dTest = strings.count
+        if dTest == 0{
+            print ("Defaults not set skipping...")
+        }
+        else {
+            UserDefaults.standard.set(strings, forKey:"strings")
+        }
+        
+        let recoveredStrings = UserDefaults.standard.object(forKey: "strings")
+        let test = recoveredStrings as! [String:[[Int]]]
+        if test.count == 0 {
+            print("First Run?")
+        }
+        else {
+            var engine: EngineProtocol!
+            engine = StandardEngine.mapNew()
+            engine.loadStateDict(saveDict: recoveredStrings as! [String : [[Int]]])
+        }
+        
+         return true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

@@ -173,6 +173,9 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     
     //MARK: Segue Handling
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let cancelButton = UIBarButtonItem()
+        cancelButton.title = "Cancel"
+        navigationItem.backBarButtonItem = cancelButton
         let indexPath = tableView.indexPathForSelectedRow
         if let indexPath = indexPath{
             let gridEditorController = segue.destination as! GridEditorViewController
@@ -180,9 +183,13 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
             gridEditorController.gridName = self.json.gridNames[indexPath.item]
             gridEditorController.gridContents = self.json.getContents(index: indexPath.item)
             let maxSize = json.findMax(contents: self.json.getContents(index: indexPath.item))
+            if maxSize == 0 {
+                StandardEngine.mapNew().updateCols(col: engine.cols)
+                StandardEngine.mapNew().updateRows(row: engine.rows)
+            } else {
             StandardEngine.mapNew().updateCols(col: (maxSize)*2)
             StandardEngine.mapNew().updateRows(row: (maxSize)*2)
-            
+            }
             gridEditorController.saveClosure = {gName, alive in
 
                 self.json.jsonArray[indexPath.item]=["title" : gName, "contents":alive]

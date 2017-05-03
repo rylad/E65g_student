@@ -134,20 +134,39 @@ public extension Grid {
     }
 }
 
+var configuration: [String:[[Int]]] = [:]
+
+public extension Grid {
+    func setConfiguration() {
+        lazyPositions(self.size).forEach {
+            switch self[$0.row, $0.col] {
+            case .born:
+                configuration["born"] = (configuration["born"] ?? []) + [[$0.row, $0.col]]
+            case .died:
+                configuration["died"] = (configuration["died"] ?? []) + [[$0.row, $0.col]]
+            case .alive:
+                configuration["alive"] = (configuration["alive"] ?? []) + [[$0.row, $0.col]]
+            case .empty:
+                ()
+            }
+        }
+    }
+}
+
 protocol JsonProtocol {
     var jsonFull: Any { get }
-    var jsonArray: Array<Any> { get set }
+    var jsonArray: Array<Dictionary<String,Any>> { get set }
     var gridNames: [String] { get set }
-    var jsonDictionary: Dictionary<String, AnyHashable>{ get set }
+    var jsonDictionary: Dictionary<String,Any> { get set }
     var jsonTitle: String { get set }
     var jsonContents:[[Int]] { get set }
     
     func parse()
-    func setDictionary(index: Int) -> Dictionary<String, AnyHashable>
-    func getContents(index: Int)->[[Int]]
+    func setDictionary(index: Int) -> Dictionary<String, Any>
+    func getContents(index: Int)->Array<Array<Int>>
     func getTitle(index: Int)->String
-    func findMax(contents : [[Int]]) -> Int
-    func addNew(title: String, contents:[[Int]])
+    func findMax(contents : Array<Array<Int>>) -> Int
+    func addNew(title: String, contents:Array<Array<Int>>)
     func updateNames() -> [String]
     func addGrid()
 }
@@ -156,16 +175,16 @@ class JsonData : JsonProtocol{
     public static var jsonInfo: JsonData = JsonData(jsonArray: [], gridNames:[])
     let finalProjectURL = "https://dl.dropboxusercontent.com/u/7544475/S65g.json"
     var jsonFull: Any = []
-    var jsonArray: Array<Any> = []
+    var jsonArray: Array<Dictionary<String,Any>> = []
     var gridNames: [String] = []
-    var jsonDictionary: Dictionary<String, AnyHashable> = [:]
+    var jsonDictionary: Dictionary<String,Any> = [:]
     var jsonTitle: String = ""
-    var jsonContents: [[Int]]=[[]]
-    var contents : [[Int]] = [[]]
+    var jsonContents: Array<Array<Int>>=[[]]
+    var contents : Array<Array<Int>> = [[]]
     var index : Int = 0
     var max : Int = 0
     
-    init(jsonArray: Array<Any>, gridNames: [String]){
+    init(jsonArray: Array<[String:[[Int]]]>, gridNames: [String]){
         self.jsonArray = jsonArray
         self.gridNames = gridNames
     }
@@ -173,18 +192,18 @@ class JsonData : JsonProtocol{
     func parse() {
         let fetcher = Fetcher()
         fetcher.fetchJSON(url: URL(string:finalProjectURL)!) { (json: Any?, message: String?) in
-            self.jsonArray = json as! Array
+            self.jsonArray = json as! Array<Dictionary<String,Any>>
             print (self.jsonArray)
         }
     }
     
-    func setDictionary(index: Int) -> Dictionary<String, AnyHashable>{
-        self.jsonDictionary = self.jsonArray[index] as! Dictionary
+    func setDictionary(index: Int) -> Dictionary<String, Any>{
+        self.jsonDictionary = self.jsonArray[index]
         return self.jsonDictionary
     }
     
-    func getContents(index: Int)->[[Int]]{
-        self.jsonContents =  setDictionary(index: index)["contents"] as! [[Int]]
+    func getContents(index: Int)->Array<Array<Int>>{
+        self.jsonContents =  setDictionary(index: index)["contents"] as! Array<Array<Int>>
         return self.jsonContents
     }
     
@@ -195,11 +214,15 @@ class JsonData : JsonProtocol{
     
     
     func findMax(contents:[[Int]]) -> Int {
+        if contents.count == 1 {
+            return 0
+        } else {
         self.max = contents.flatMap{return $0}.max()!
         return self.max
+        }
     }
     
-    func addNew(title: String, contents:[[Int]]) {
+    func addNew(title: String, contents:Array<Array<Int>>) {
         self.jsonArray.append(["title": title, "contents":contents])
         self.gridNames.append(title)
     }
@@ -208,7 +231,7 @@ class JsonData : JsonProtocol{
         self.gridNames = []
         var count = 0
         while count < self.jsonArray.count {
-            let jsonDictionary = self.jsonArray[count] as! Dictionary<String, AnyHashable>
+            let jsonDictionary = self.jsonArray[count]
             let jsonTitle: String = jsonDictionary["title"] as! String
             self.gridNames.append(jsonTitle )
             
@@ -246,12 +269,14 @@ protocol EngineProtocol {
     
     func step() -> GridProtocol
     func reset() -> GridProtocol
+    func loadStateDict(saveDict: [String:[[Int]]])
     func saving(withGrid: GridProtocol) -> [String: [[Int]]]
 }
 
 
 
 class StandardEngine: EngineProtocol {
+
     public static var engine: StandardEngine = StandardEngine(rows: 10, cols: 10, refreshRate: 10.0	)
     var grid: GridProtocol
     var refreshTimer: Timer?
@@ -281,7 +306,8 @@ class StandardEngine: EngineProtocol {
     var aliveState = [[Int]]()
     var bornState = [[Int]]()
     var diedState = [[Int]]()
-    var saveDict = [String: [[Int]]]()
+    var loadDict = [String: [[Int]]]()
+    var loadStateDict = [String:[[Int]]]()
     
 
     var delegate: EngineDelegate?
@@ -348,7 +374,26 @@ class StandardEngine: EngineProtocol {
         return grid
     }
     
-    func saving(withGrid: GridProtocol) -> [String:[[Int]]]{
+    internal func loadState(gridContents: [[Int]], state: CellState){
+        var count = 0
+        while count < (gridContents.count) {
+            var coordinate = gridContents[count]
+            let row = Int(coordinate[0])
+            let col = Int(coordinate[1])
+            StandardEngine.engine.grid[row, col] = state
+            count+=1
+        }
+    }
+
+    func loadStateDict(saveDict: [String : [[Int]]]) ->(){
+            loadState(gridContents: saveDict["born"]!, state: .born )
+            loadState(gridContents: saveDict["died"]!, state: .died)
+            loadState(gridContents: saveDict["alive"]!, state: .alive)
+        }
+    
+    
+    func saving(withGrid: GridProtocol) -> [String : [[Int]]] {
+        var saveDict : [String:[[Int]]]
         (0 ..< withGrid.size.rows).forEach { i in
             (0 ..< withGrid.size.cols).forEach { j in
                 switch withGrid[j,i].description()
@@ -364,14 +409,13 @@ class StandardEngine: EngineProtocol {
                 }
             }
         }
-        print(aliveState)
-        print(bornState)
-        print(diedState)
         saveDict = ["alive": aliveState, "born": bornState, "died": diedState ]
         NotificationCenter.default.post(
-            name: NSNotification.Name(rawValue: "refresh"),
+            name: NSNotification.Name(rawValue: "saving"),
             object:nil,
-            userInfo: saveDict);
+            userInfo: ["dict":saveDict])
+        
+        print (saveDict)
         return saveDict
     }
 

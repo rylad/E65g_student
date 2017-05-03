@@ -28,12 +28,7 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
         self.gridView.setNeedsDisplay()
         
         json = JsonData.mapNew()
-        json.gridNames = json.updateNames()
-        
-        
-        //json = jsonData()
-        //self.json.jsonArray = json.jsonArray
-        //self.json.gridNames = json.gridNames
+
         
     }
     
@@ -46,11 +41,7 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
         self.gridView.setNeedsDisplay()
         
         json = JsonData.mapNew()
-        json.gridNames = json.updateNames()
-        
-        //json = jsonData()
-        //self.json.jsonArray = json.jsonArray
-        //self.json.gridNames = json.gridNames
+
     }
     
     func engineDidUpdate(withGrid: GridProtocol) {
@@ -91,9 +82,7 @@ class SimulationViewController: UIViewController, GridViewDataSource, EngineDele
             self.json.addNew(title: (textField?.text)!, contents: self.engine.aliveState)
         }))
         self.present(alert, animated: true, completion: nil)
-        
-        
-        
+        _ = self.engine.saving(withGrid: self.engine.grid)
 
     }
     

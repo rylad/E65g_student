@@ -24,7 +24,6 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden=false
-
         if let gridName = gridName{
             gridNameTextField.text = gridName
         }
@@ -39,14 +38,17 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
     
         var count = 0
         while count < (gridContents?.count)! {
+            if gridContents?.count == 1 {
+                return
+            } else {
             var coordinate = gridContents![count]
             let row = Int(coordinate[0])
             let col = Int(coordinate[1])
             engine.grid[row, col] = .alive
             count+=1
             engineDidUpdate(withGrid: engine.grid)
+            }
         }
-
     }
     func engineDidUpdate(withGrid: GridProtocol) {
         self.gridView.gridRows = StandardEngine.mapNew().rows
@@ -71,7 +73,8 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
         let gContents = engine.saving(withGrid: engine.grid)
         let alive = gContents["alive"]
         if let gName = gridNameTextField.text,
-
+        
+            
         let saveClosure = saveClosure {
             saveClosure(gName, alive!)
             self.navigationController?.popViewController(animated: true)
