@@ -13,15 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
-//    func findDict(_ notification: NSNotification) -> [String: [[Int]]] {
-//        if let saveDict = notification.userInfo?["saveDict"] as? [String: [[Int]]]{
-//            return saveDict
-//        }
-//        return saveDict
-//    }
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         var strings = [String: [[Int]]]()
@@ -33,12 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             queue: nil) {(n) in
                 let nd = n.userInfo?["dict"]
                 strings =  nd as! [String:[[Int]]]
-                
-
         }
-        
-
-        
         
         let dTest = strings.count
         if dTest == 0{
@@ -48,17 +34,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(strings, forKey:"strings")
         }
         
-        let recoveredStrings = UserDefaults.standard.object(forKey: "strings")
-        let test = recoveredStrings as! [String:[[Int]]]
-        if test.count == 0 {
-            print("First Run?")
-        }
-        else {
-            var engine: EngineProtocol!
-            engine = StandardEngine.mapNew()
-            engine.loadStateDict(saveDict: recoveredStrings as! [String : [[Int]]])
+        func isKeyPresentInUserDefaults(key: String) -> Bool {
+            return UserDefaults.standard.object(forKey: key) != nil
         }
         
+        if isKeyPresentInUserDefaults(key: "strings") == true {
+            let test = UserDefaults.standard.object(forKey: "strings") as! [String : [[Int]]]
+            if  test.count > 0 {
+                var engine: EngineProtocol!
+                engine = StandardEngine.mapNew()
+                engine.loadStateDict(saveDict: UserDefaults.standard.object(forKey: "strings") as! [String : [[Int]]])
+            }
+        }
          return true
     }
 
