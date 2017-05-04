@@ -1,8 +1,9 @@
-	//
+//
 //  AppDelegate.swift
 //  Assignment4
 //
 //  Created by Van Simmons on 1/15/17.
+//  Edited by Sean Valois on 5/3/17
 //  Copyright © 2017 Harvard Division of Continuing Education. All rights reserved.
 //
 
