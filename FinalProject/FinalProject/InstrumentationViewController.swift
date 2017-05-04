@@ -22,8 +22,6 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     
     let finalProjectURL = "https://dl.dropboxusercontent.com/u/7544475/S65g.json"
     
-    //public var jsonArray: NSMutableArray = []
-    
     var engine: EngineProtocol!
     var json: JsonProtocol!
     var gridNames: [String] = []
@@ -39,9 +37,6 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         toggleOn.setOn(false, animated: false)
         
         json = JsonData.mapNew()
-        
-        
-        //json = jsonData()
         json.parse()
         
         //Allowing time for fetcher
@@ -51,7 +46,6 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         
         sleep(3)
         //gridNames = json.updateNames()
-        print (json.gridNames)
 
         
         }

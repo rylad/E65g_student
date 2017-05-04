@@ -33,8 +33,6 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
         gridView.drawGrid = self
         self.gridView.gridRows = engine.rows
         self.gridView.gridCols = engine.cols
-        
-        //json=jsonData()
     
         var count = 0
         while count < (gridContents?.count)! {
@@ -65,7 +63,6 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 
@@ -77,7 +74,7 @@ class GridEditorViewController: UIViewController, EngineDelegate, GridViewDataSo
             
         let saveClosure = saveClosure {
             saveClosure(gName, alive!)
-            self.navigationController?.popViewController(animated: true)
+            _ = navigationController?.popViewController(animated: true)
         }
         
     

@@ -134,25 +134,6 @@ public extension Grid {
     }
 }
 
-var configuration: [String:[[Int]]] = [:]
-
-public extension Grid {
-    func setConfiguration() {
-        lazyPositions(self.size).forEach {
-            switch self[$0.row, $0.col] {
-            case .born:
-                configuration["born"] = (configuration["born"] ?? []) + [[$0.row, $0.col]]
-            case .died:
-                configuration["died"] = (configuration["died"] ?? []) + [[$0.row, $0.col]]
-            case .alive:
-                configuration["alive"] = (configuration["alive"] ?? []) + [[$0.row, $0.col]]
-            case .empty:
-                ()
-            }
-        }
-    }
-}
-
 protocol JsonProtocol {
     var jsonFull: Any { get }
     var jsonArray: Array<Dictionary<String,Any>> { get set }
@@ -193,7 +174,6 @@ class JsonData : JsonProtocol{
         let fetcher = Fetcher()
         fetcher.fetchJSON(url: URL(string:finalProjectURL)!) { (json: Any?, message: String?) in
             self.jsonArray = json as! Array<Dictionary<String,Any>>
-            print (self.jsonArray)
         }
     }
     
@@ -327,8 +307,6 @@ class StandardEngine: EngineProtocol {
     func updateRows(row: Int){
         StandardEngine.engine.rows = row
         self.rows = row
-        print (self.rows)
-        print (self.cols)
         grid = Grid(GridSize(rows: self.rows, cols: self.cols))
         engineUpdateNC()
         delegate?.engineDidUpdate(withGrid: grid)
@@ -414,8 +392,6 @@ class StandardEngine: EngineProtocol {
             name: NSNotification.Name(rawValue: "saving"),
             object:nil,
             userInfo: ["dict":saveDict])
-        
-        print (saveDict)
         return saveDict
     }
 
